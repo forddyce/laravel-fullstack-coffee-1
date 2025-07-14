@@ -1,17 +1,40 @@
 <?php
 
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Auth\LogoutController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/', function () {
-    return Inertia::render('index');
+    return Inertia::render('front/pages/Index', [
+        'canLogin' => Route::has('login'),
+        'canRegister' => Route::has('register'),
+        'laravelVersion' => Application::VERSION,
+        'phpVersion' => PHP_VERSION,
+    ])->rootView('front');
 })->name('home');
 
-Route::middleware(['auth', 'verified'])->group(function () {
-    Route::get('dashboard', function () {
-        return Inertia::render('dashboard');
-    })->name('dashboard');
+Route::middleware('guest')->group(function () {
+    Route::get('login', [LoginController::class, 'create'])->name('login');
+    Route::post('login', [LoginController::class, 'store']);
 });
 
-require __DIR__ . '/settings.php';
-require __DIR__ . '/auth.php';
+Route::post('logout', [LogoutController::class, 'store'])->middleware('auth')->name('logout');
+
+Route::prefix('admin')->name('admin.')->group(function () {
+    Route::middleware(['auth'])->group(function () {
+        Route::get('/dashboard', function () {
+            return Inertia::render('back/pages/Dashboard');
+        })->name('dashboard');
+
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::get('/', function () {
+                return Inertia::render('back/pages/Settings');
+            })->name('index');
+            Route::get('/password', [ProfileController::class, 'editPassword'])->name('password');
+            Route::put('/password', [ProfileController::class, 'updatePassword'])->name('password.update');
+        });
+    });
+});
