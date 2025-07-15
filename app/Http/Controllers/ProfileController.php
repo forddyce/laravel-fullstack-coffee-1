@@ -13,7 +13,7 @@ class ProfileController extends Controller
 {
     public function editPassword(): Response
     {
-        return Inertia::render('back/pages/auth/ChangePassword');
+        return Inertia::render('Auth/ChangePassword');
     }
 
     public function updatePassword(Request $request): RedirectResponse

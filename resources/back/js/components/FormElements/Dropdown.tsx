@@ -67,8 +67,8 @@ const Content = ({ alignment, width, contentClasses, children }: ContentProps) =
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
         >
-            <div className={`absolute z-50 mt-2 rounded-md shadow-lg ${alignmentClasses} ${widthClass}`} onClick={() => setOpen(false)}>
-                <div className={`rounded-md ring-1 ring-black ring-opacity-5 ${contentClasses}`}>{children}</div>
+            <div className={`absolute z-50 mt-2 rounded-md bg-white shadow-lg ${alignmentClasses} ${widthClass}`} onClick={() => setOpen(false)}>
+                <div className={`rounded-md ${contentClasses}`}>{children}</div>
             </div>
         </Transition>
     );

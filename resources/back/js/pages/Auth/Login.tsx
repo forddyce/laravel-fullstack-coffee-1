@@ -1,6 +1,6 @@
-import InputError from '@/back/js/components/Form/InputError';
-import PrimaryButton from '@/back/js/components/Form/PrimaryButton';
-import TextInput from '@/back/js/components/Form/TextInput';
+import InputError from '@/back/js/components/FormElements/InputError';
+import PrimaryButton from '@/back/js/components/FormElements/PrimaryButton';
+import TextInput from '@/back/js/components/FormElements/TextInput';
 import GuestLayout from '@/back/js/layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
@@ -24,16 +24,13 @@ export default function Login() {
 
     const submit = (e: React.FormEvent) => {
         e.preventDefault();
-        post(route('login'));
+        post(route('admin.login'));
     };
 
     return (
         <GuestLayout>
             <Head title="Admin Log in" />
-
-            {status && <div className="mb-4 text-sm font-medium text-green-600">{status}</div>}
-
-            <form onSubmit={submit} className="rounded-lg bg-white p-6 shadow-md">
+            <form onSubmit={submit} className="rounded-lg bg-white p-6">
                 <h2 className="mb-6 text-center text-2xl font-bold">Admin Login</h2>
 
                 <div>
@@ -41,6 +38,7 @@ export default function Login() {
                         id="email"
                         type="email"
                         name="email"
+                        placeholder="Email"
                         value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
@@ -54,6 +52,7 @@ export default function Login() {
                 <div className="mt-4">
                     <TextInput
                         id="password"
+                        placeholder="Password"
                         type="password"
                         name="password"
                         value={data.password}

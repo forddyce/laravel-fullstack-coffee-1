@@ -1,7 +1,7 @@
-import InputError from '@/back/js/components/Form/InputError';
-import InputLabel from '@/back/js/components/Form/InputLabel';
-import PrimaryButton from '@/back/js/components/Form/PrimaryButton';
-import TextInput from '@/back/js/components/Form/TextInput';
+import InputError from '@/back/js/components/FormElements/InputError';
+import InputLabel from '@/back/js/components/FormElements/InputLabel';
+import PrimaryButton from '@/back/js/components/FormElements/PrimaryButton';
+import TextInput from '@/back/js/components/FormElements/TextInput';
 import AuthenticatedLayout from '@/back/js/layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { useRef } from 'react';
@@ -43,7 +43,7 @@ export default function ChangePassword() {
     };
 
     return (
-        <AuthenticatedLayout header={<h2 className="text-xl font-semibold leading-tight text-gray-800">Change Password</h2>}>
+        <AuthenticatedLayout header={<p className="text-xl font-semibold leading-tight text-gray-800">Change Password</p>}>
             <Head title="Change Password" />
 
             <div className="py-12">

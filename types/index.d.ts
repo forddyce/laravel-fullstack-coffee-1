@@ -9,6 +9,11 @@ declare global {
     }
 }
 
+export interface Role {
+    id: number;
+    name: string;
+}
+
 export interface User {
     id: number;
     name: string;
@@ -16,9 +21,7 @@ export interface User {
     email_verified_at: string | null;
     created_at: string;
     updated_at: string;
-    is_admin?: boolean;
-    roles?: string[];
-    permissions?: string[];
+    roles: Role[];
 }
 
 declare module '@inertiajs/core' {

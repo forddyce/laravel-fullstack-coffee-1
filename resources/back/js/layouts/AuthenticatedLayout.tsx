@@ -1,9 +1,11 @@
-import ApplicationLogo from '@/back/js/components/ApplicationLogo';
-import Dropdown from '@/back/js/components/Dropdown.tsx';
-import NavLink from '@/back/js/components/NavLink.tsx';
-import { Link, usePage } from '@inertiajs/react';
+import { usePage } from '@inertiajs/react';
 import { ReactNode, useState } from 'react';
 import type { User } from 'types';
+
+import Sidebar from '@/back/js/components/Sidebar';
+import sidebarItems from '@/back/js/utils/sidebarItems';
+
+import Dropdown from '@/back/js/components/FormElements/Dropdown';
 
 interface AuthenticatedLayoutProps {
     header?: ReactNode;
@@ -13,39 +15,11 @@ interface AuthenticatedLayoutProps {
 export default function AuthenticatedLayout({ header, children }: AuthenticatedLayoutProps) {
     const user = usePage().props.auth.user as User;
 
-    const [showingNavigationDropdown, setShowingNavigationDropdown] = useState(false);
     const [sidebarOpen, setSidebarOpen] = useState(true);
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <nav
-                className={`fixed left-0 top-0 h-full w-64 bg-gray-800 p-4 text-white transition-transform duration-300 ease-in-out ${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} z-20`}
-            >
-                <div className="flex h-16 items-center justify-between border-b border-gray-700 pb-4">
-                    <Link href={route('admin.dashboard')} className="flex items-center">
-                        <ApplicationLogo className="block h-9 w-auto fill-current text-gray-200" />
-                        <span className="ml-3 text-xl font-semibold">Admin Panel</span>
-                    </Link>
-                </div>
-
-                <div className="mt-6">
-                    <NavLink href={route('admin.dashboard')} active={route().current('admin.dashboard')}>
-                        Dashboard
-                    </NavLink>
-                    <NavLink href={route('admin.settings')} active={route().current('admin.settings')}>
-                        Settings
-                    </NavLink>
-                    <div className="mt-4 border-t border-gray-700 pt-4">
-                        <span className="mb-2 block text-xs uppercase text-gray-400">Modules</span>
-                        <NavLink href={route('admin.blogs.index')} active={route().current('admin.blogs.*')}>
-                            Blogs
-                        </NavLink>
-                        <NavLink href={route('admin.blog-tags.index')} active={route().current('admin.blog-tags.*')}>
-                            Blog Tags
-                        </NavLink>
-                    </div>
-                </div>
-            </nav>
+            <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} items={sidebarItems} />
 
             <div className={`transition-all duration-300 ease-in-out ${sidebarOpen ? 'ml-64' : 'ml-0'}`}>
                 <header className="relative z-10 flex items-center justify-between bg-white px-4 py-3 shadow">
@@ -87,7 +61,7 @@ export default function AuthenticatedLayout({ header, children }: AuthenticatedL
                             </Dropdown.Trigger>
 
                             <Dropdown.Content>
-                                <Dropdown.Link href={route('admin.settings')}>Settings</Dropdown.Link>
+                                <Dropdown.Link href={route('admin.settings.index')}>Settings</Dropdown.Link>
                                 <Dropdown.Link href={route('logout')} method="post" as="button">
                                     Log Out
                                 </Dropdown.Link>

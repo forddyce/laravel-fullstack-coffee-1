@@ -14,7 +14,7 @@ class LoginController extends Controller
 {
     public function create(): Response
     {
-        return Inertia::render('back/pages/auth/login');
+        return Inertia::render('Auth/Login');
     }
 
     public function store(Request $request): RedirectResponse
@@ -32,7 +32,6 @@ class LoginController extends Controller
 
         $request->session()->regenerate();
 
-        // Redirect to admin dashboard after successful login
         return redirect()->intended(route('admin.dashboard', absolute: false));
     }
 }
