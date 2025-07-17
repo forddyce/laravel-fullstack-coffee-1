@@ -15,13 +15,13 @@ return new class extends Migration
             $table->id();
             $table->string('title', 100);
             $table->string('slug', 150)->unique();
-            $table->text('primary_image')->nullable();
+            $table->text('primary_image')->nullable(); // from the images field below, we can set one as the product primary image
             $table->text('content')->nullable();
             $table->text('summary')->nullable();
             $table->json('specifications')->nullable();
-            $table->json('images')->nullable();
+            $table->json('images')->nullable(); // products have multiple images, string separated with commas
             $table->boolean('is_active')->default(true);
-            $table->tinyInteger('favorite')->default(0);
+            $table->tinyInteger('favorite')->default(0); // this can be any value, used for future
             $table->decimal('price', 16, 4)->default(0);
             $table->string('created_by', 100)->nullable();
             $table->string('updated_by', 100)->nullable();
