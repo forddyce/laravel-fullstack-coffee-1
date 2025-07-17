@@ -1,9 +1,8 @@
-import InputError from '@/back/js/components/FormElements/InputError';
-import PrimaryButton from '@/back/js/components/FormElements/PrimaryButton';
 import TextInput from '@/back/js/components/FormElements/TextInput';
 import GuestLayout from '@/back/js/layouts/GuestLayout';
 import { Head, useForm } from '@inertiajs/react';
 import { useEffect } from 'react';
+import Button from '../../components/FormElements/Button';
 
 export default function Login() {
     const { data, setData, post, processing, errors, reset } = useForm<{
@@ -23,6 +22,7 @@ export default function Login() {
     }, []);
 
     const submit = (e: React.FormEvent) => {
+        if (processing) return true;
         e.preventDefault();
         post(route('admin.login'));
     };
@@ -38,30 +38,30 @@ export default function Login() {
                         id="email"
                         type="email"
                         name="email"
-                        placeholder="Email"
                         value={data.email}
                         className="mt-1 block w-full"
                         autoComplete="username"
                         isFocused={true}
                         onChange={(e) => setData('email', e.target.value)}
+                        label="Email"
+                        error={errors.email}
+                        required={true}
                     />
-
-                    <InputError message={errors.email} className="mt-2" />
                 </div>
 
                 <div className="mt-4">
                     <TextInput
                         id="password"
-                        placeholder="Password"
                         type="password"
                         name="password"
                         value={data.password}
                         className="mt-1 block w-full"
                         autoComplete="current-password"
                         onChange={(e) => setData('password', e.target.value)}
+                        label="Password"
+                        error={errors.password}
+                        required={true}
                     />
-
-                    <InputError message={errors.password} className="mt-2" />
                 </div>
 
                 <div className="mt-4 block">
@@ -78,9 +78,9 @@ export default function Login() {
                 </div>
 
                 <div className="mt-4 flex items-center justify-end">
-                    <PrimaryButton className="ms-4" disabled={processing}>
-                        Log in
-                    </PrimaryButton>
+                    <Button className="ms-4" disabled={processing}>
+                        {processing ? 'Logging in...' : 'Log in'}
+                    </Button>
                 </div>
             </form>
         </GuestLayout>

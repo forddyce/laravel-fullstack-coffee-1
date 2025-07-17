@@ -1,11 +1,11 @@
+import { useNotifications } from '@/back/js/hooks/useNotification';
 import type { PageProps } from '@inertiajs/core';
 import { useForm } from '@inertiajs/react';
-import React, { FormEventHandler, useEffect } from 'react';
+import { FormEventHandler, useEffect } from 'react';
 import type { Role, User } from 'types';
-import { useNotifications } from '../../hooks/useNotification';
-import InputError from '../FormElements/InputError';
-import InputLabel from '../FormElements/InputLabel';
-import PrimaryButton from '../FormElements/PrimaryButton';
+import Button from '../FormElements/Button';
+import type { SelectOption } from '../FormElements/CustomSelect';
+import CustomSelect from '../FormElements/CustomSelect';
 import TextInput from '../FormElements/TextInput';
 
 interface UserFormProps extends PageProps {
@@ -27,6 +27,41 @@ export default function UserForm({ user, availableRoles }: UserFormProps) {
     useEffect(() => {
         reset('password', 'password_confirmation');
     }, [user]);
+
+    const roleOptions: SelectOption[] = availableRoles.map((role) => ({
+        value: role.id.toString(),
+        label: role.name,
+    }));
+
+    const handleRoleChange = (selected: SelectOption[]) => {
+        setData(
+            'roles',
+            selected.map((option) => option.value),
+        );
+    };
+
+    const selectedRoleOptions: SelectOption[] = roleOptions.filter((option) => data.roles.includes(option.value));
+
+    const isSubmitDisabled = () => {
+        if (processing) {
+            return true;
+        }
+
+        if (!data.name || !data.email) {
+            return true;
+        }
+
+        if (!user) {
+            if (!data.password || !data.password_confirmation) {
+                return true;
+            }
+        } else {
+            if (data.password && !data.password_confirmation) {
+                return true;
+            }
+        }
+        return false;
+    };
 
     const submit: FormEventHandler = (e) => {
         e.preventDefault();
@@ -55,17 +90,12 @@ export default function UserForm({ user, availableRoles }: UserFormProps) {
         }
     };
 
-    const handleRoleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const selectedOptions = Array.from(e.target.selectedOptions).map((option) => option.value);
-        setData('roles', selectedOptions);
-    };
-
     return (
         <form onSubmit={submit}>
             <div>
-                <InputLabel htmlFor="name" value="Name" />
                 <TextInput
                     id="name"
+                    type="text"
                     name="name"
                     value={data.name}
                     className="mt-1 block w-full"
@@ -73,12 +103,12 @@ export default function UserForm({ user, availableRoles }: UserFormProps) {
                     isFocused={true}
                     onChange={(e) => setData('name', e.target.value)}
                     required
+                    label="Name"
+                    error={errors.name}
                 />
-                <InputError message={errors.name} className="mt-2" />
             </div>
 
             <div className="mt-4">
-                <InputLabel htmlFor="email" value="Email" />
                 <TextInput
                     id="email"
                     type="email"
@@ -88,12 +118,12 @@ export default function UserForm({ user, availableRoles }: UserFormProps) {
                     autoComplete="username"
                     onChange={(e) => setData('email', e.target.value)}
                     required
+                    label="Email"
+                    error={errors.email}
                 />
-                <InputError message={errors.email} className="mt-2" />
             </div>
 
             <div className="mt-4">
-                <InputLabel htmlFor="password" value="Password" />
                 <TextInput
                     id="password"
                     type="password"
@@ -103,12 +133,12 @@ export default function UserForm({ user, availableRoles }: UserFormProps) {
                     autoComplete="new-password"
                     onChange={(e) => setData('password', e.target.value)}
                     required={!user}
+                    label="Password"
+                    error={errors.password}
                 />
-                <InputError message={errors.password} className="mt-2" />
             </div>
 
             <div className="mt-4">
-                <InputLabel htmlFor="password_confirmation" value="Confirm Password" />
                 <TextInput
                     id="password_confirmation"
                     type="password"
@@ -118,33 +148,28 @@ export default function UserForm({ user, availableRoles }: UserFormProps) {
                     autoComplete="new-password"
                     onChange={(e) => setData('password_confirmation', e.target.value)}
                     required={!user || data.password.length > 0}
+                    label="Confirm Password"
+                    error={errors.password_confirmation}
                 />
-                <InputError message={errors.password_confirmation} className="mt-2" />
             </div>
 
             <div className="mt-4">
-                <InputLabel htmlFor="roles" value="Assign Roles" />
-                <select
-                    id="roles"
-                    name="roles[]"
-                    multiple
-                    value={data.roles}
+                <CustomSelect
+                    label="Assign Roles"
+                    name="roles"
+                    multi={true}
+                    options={roleOptions}
+                    values={selectedRoleOptions}
                     onChange={handleRoleChange}
-                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                >
-                    {availableRoles.map((role) => (
-                        <option key={role.id} value={role.id.toString()}>
-                            {role.name}
-                        </option>
-                    ))}
-                </select>
-                <InputError message={errors.roles} className="mt-2" />
+                    error={errors.roles}
+                    placeholder="Select roles for the user"
+                />
             </div>
 
             <div className="mt-4 flex items-center justify-end">
-                <PrimaryButton className="ms-4" disabled={processing}>
-                    {user ? 'Update User' : 'Create User'}
-                </PrimaryButton>
+                <Button className="ms-4" disabled={isSubmitDisabled()}>
+                    {processing ? 'Submitting...' : user ? 'Update User' : 'Create User'}
+                </Button>
             </div>
         </form>
     );

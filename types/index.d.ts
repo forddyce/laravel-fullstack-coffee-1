@@ -12,6 +12,9 @@ declare global {
 export interface Role {
     id: number;
     name: string;
+    guard_name: string;
+    created_at: string;
+    updated_at: string;
 }
 
 export interface User {
@@ -22,6 +25,33 @@ export interface User {
     created_at: string;
     updated_at: string;
     roles: Role[];
+}
+
+export interface BlogTag {
+    id: number;
+    title: string;
+    slug: string;
+    is_active: boolean;
+    created_by: string | null;
+    updated_by: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Blog {
+    id: number;
+    title: string;
+    slug: string;
+    content: string | null;
+    summary: string | null;
+    featured_image: string | null;
+    is_active: boolean;
+    published_date: string;
+    created_by: string | null;
+    updated_by: string | null;
+    created_at: string;
+    updated_at: string;
+    tags: BlogTag[];
 }
 
 declare module '@inertiajs/core' {

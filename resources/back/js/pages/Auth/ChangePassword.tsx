@@ -1,6 +1,6 @@
+import Button from '@/back/js/components/FormElements/Button';
 import InputError from '@/back/js/components/FormElements/InputError';
 import InputLabel from '@/back/js/components/FormElements/InputLabel';
-import PrimaryButton from '@/back/js/components/FormElements/PrimaryButton';
 import TextInput from '@/back/js/components/FormElements/TextInput';
 import AuthenticatedLayout from '@/back/js/layouts/AuthenticatedLayout';
 import { Head, useForm } from '@inertiajs/react';
@@ -98,7 +98,7 @@ export default function ChangePassword() {
                                 </div>
 
                                 <div className="flex items-center gap-4">
-                                    <PrimaryButton disabled={processing}>Save</PrimaryButton>
+                                    <Button disabled={processing}>Save</Button>
                                 </div>
                             </form>
                         </section>

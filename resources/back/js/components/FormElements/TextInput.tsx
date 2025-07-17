@@ -1,25 +1,33 @@
 import { forwardRef, InputHTMLAttributes, useEffect, useRef } from 'react';
+import InputError from './InputError';
+import InputLabel from './InputLabel';
 
 interface TextInputProps extends InputHTMLAttributes<HTMLInputElement> {
     isFocused?: boolean;
+    label?: string;
+    error?: string;
 }
 
-export default forwardRef<HTMLInputElement, TextInputProps>(function TextInput({ type = 'text', className = '', isFocused = false, ...props }, ref) {
-    const internalRef = useRef<HTMLInputElement>(null);
-    const resolvedRef = (ref as React.RefObject<HTMLInputElement>) || internalRef;
+const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
+    ({ type = 'text', className = '', isFocused = false, label, error, ...props }, ref) => {
+        const input = ref ? (ref as React.RefObject<HTMLInputElement>) : useRef<HTMLInputElement>(null);
 
-    useEffect(() => {
-        if (isFocused && resolvedRef.current) {
-            resolvedRef.current.focus();
-        }
-    }, [isFocused, resolvedRef]);
+        useEffect(() => {
+            if (isFocused) {
+                input.current?.focus();
+            }
+        }, [isFocused]);
 
-    return (
-        <input
-            {...props}
-            type={type}
-            className={'rounded-md border border-gray-300 px-2 py-4 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 ' + className}
-            ref={resolvedRef}
-        />
-    );
-});
+        const inputClasses = `px-2 py-4 border border-gray-300 focus:border-indigo-500 focus:ring-indigo-500 rounded-md ${className}`;
+
+        return (
+            <div>
+                {label && <InputLabel htmlFor={props.id ?? props.name ?? ''} value={label} required={props.required} />}
+                <input {...props} type={type} className={inputClasses} ref={input} />
+                {error && <InputError message={error} className="mt-2" />}
+            </div>
+        );
+    },
+);
+
+export default TextInput;

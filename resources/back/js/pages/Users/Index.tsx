@@ -1,4 +1,5 @@
-import PrimaryButton from '@/back/js/components/FormElements/PrimaryButton';
+import Button from '@/back/js/components/FormElements/Button';
+import Pagination from '@/back/js/components/Pagination';
 import AuthenticatedLayout from '@/back/js/layouts/AuthenticatedLayout';
 import type { PageProps } from '@inertiajs/core';
 import { Head, Link, router, usePage } from '@inertiajs/react';
@@ -8,13 +9,20 @@ import { useNotifications } from '../../hooks/useNotification';
 interface UserIndexPageProps extends PageProps {
     users: {
         data: User[];
-        links: { url: string | null; label: string; active: boolean }[];
-        current_page: number;
-        last_page: number;
-        from: number | null;
-        to: number | null;
-        total: number;
-        per_page: number;
+        links: {
+            first: string | null;
+            last: string | null;
+            prev: string | null;
+            next: string | null;
+        };
+        meta: {
+            current_page: number;
+            from: number;
+            to: number;
+            total: number;
+            per_page: number;
+            links: { url: string | null; label: string; active: boolean }[];
+        };
     };
 }
 
@@ -65,7 +73,7 @@ export default function UserIndex() {
                         <div className="p-6 text-gray-900">
                             <div className="mb-4 flex justify-end">
                                 <Link href={route('admin.users.create')}>
-                                    <PrimaryButton>Add New User</PrimaryButton>
+                                    <Button>Add New User</Button>
                                 </Link>
                             </div>
 
@@ -135,18 +143,7 @@ export default function UserIndex() {
                                 <p className="text-center text-gray-500">No users found.</p>
                             )}
 
-                            {users.links.length > 3 && (
-                                <div className="mt-6 flex flex-wrap justify-center">
-                                    {users.links.map((link, index) => (
-                                        <Link
-                                            key={index}
-                                            href={link.url || '#'}
-                                            className={`relative inline-flex items-center border px-4 py-2 text-sm font-medium ${link.active ? 'z-10 border-indigo-500 bg-indigo-50 text-indigo-600' : 'border-gray-300 bg-white text-gray-500 hover:bg-gray-50'} ${index === 0 ? 'rounded-l-md' : ''} ${index === users.links.length - 1 ? 'rounded-r-md' : ''} `}
-                                            dangerouslySetInnerHTML={{ __html: link.label }}
-                                        />
-                                    ))}
-                                </div>
-                            )}
+                            {users.meta.links && users.meta.links.length > 3 && <Pagination links={users.meta.links} />}
                         </div>
                     </div>
                 </div>
