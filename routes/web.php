@@ -9,6 +9,10 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Api\Admin\UserController;
 use App\Http\Controllers\Api\Admin\BlogTagController;
 use App\Http\Controllers\Api\Admin\BlogController;
+use App\Http\Controllers\Api\Admin\ProductCategoryController;
+use App\Http\Controllers\Api\Admin\ProductController;
+use App\Http\Controllers\Api\Admin\AgentController;
+use App\Http\Controllers\Api\Admin\AuctionItemController;
 
 Route::get('/', function () {
     return Inertia::render('front/pages/Index', [
@@ -62,5 +66,29 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::get('/blogs/{blog}/edit', [BlogController::class, 'edit'])->name('blogs.edit');
             Route::resource('blogs', BlogController::class);
         });
+
+        Route::middleware('permission:manage product categories')->group(function () {
+            Route::get('/product-categories', [ProductCategoryController::class, 'index'])->name('product-categories.index');
+            Route::get('/product-categories/create', [ProductCategoryController::class, 'create'])->name('product-categories.create');
+            Route::get('/product-categories/{product_category}/edit', [ProductCategoryController::class, 'edit'])->name('product-categories.edit');
+            Route::resource('product-categories', ProductCategoryController::class);
+        });
+
+        Route::middleware('permission:manage products')->group(function () {
+            Route::get('/products', [ProductController::class, 'index'])->name('products.index');
+            Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
+            Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
+            Route::resource('products', ProductController::class);
+        });
+
+        Route::get('/agents', [AgentController::class, 'index'])->name('agents.index');
+        Route::get('/agents/create', [AgentController::class, 'create'])->name('agents.create');
+        Route::get('/agents/{agent}/edit', [AgentController::class, 'edit'])->name('agents.edit');
+        Route::resource('agents', AgentController::class);
+
+        Route::get('/auction-items', [AuctionItemController::class, 'index'])->name('auction-items.index');
+        Route::get('/auction-items/create', [AuctionItemController::class, 'create'])->name('auction-items.create');
+        Route::get('/auction-items/{auction_item}/edit', [AuctionItemController::class, 'edit'])->name('auction-items.edit');
+        Route::resource('auction-items', AuctionItemController::class);
     });
 });

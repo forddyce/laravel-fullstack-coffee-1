@@ -32,14 +32,10 @@ class BlogController extends Controller implements HasMiddleware
             })
             ->paginate($request->query('perPage', 10));
 
-        if ($request->inertia()) {
-            return Inertia::render('Blog/Index', [
-                'blogs' => BlogResource::collection($blogs),
-                'filters' => $request->only(['search', 'sortBy', 'sortOrder', 'perPage']),
-            ]);
-        }
-
-        return BlogResource::collection($blogs);
+        return Inertia::render('Blog/Index', [
+            'blogs' => BlogResource::collection($blogs),
+            'filters' => $request->only(['search', 'sortBy', 'sortOrder', 'perPage']),
+        ]);
     }
 
     public function create()

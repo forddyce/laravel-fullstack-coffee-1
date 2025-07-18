@@ -20,13 +20,9 @@ class UserController extends Controller
             ->orderBy($request->query('sortBy', 'name'), $request->query('sortOrder', 'asc'))
             ->paginate($request->query('perPage', 10));
 
-        if ($request->inertia()) {
-            return Inertia::render('Users/Index', [
-                'users' => UserResource::collection($users),
-            ]);
-        }
-
-        return UserResource::collection($users);
+        return Inertia::render('Users/Index', [
+            'users' => UserResource::collection($users),
+        ]);
     }
 
     public function create()

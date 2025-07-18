@@ -93,7 +93,10 @@ export default function BlogIndex() {
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
-                            <div className="mb-4 flex justify-end gap-3">
+                            <div className="mb-4 flex items-center justify-between">
+                                <Link href={route('admin.blogs.create')}>
+                                    <Button variant="primary">Add New Blog Post</Button>
+                                </Link>
                                 <div className="w-1/3">
                                     <TextInput
                                         id="search"
@@ -105,11 +108,7 @@ export default function BlogIndex() {
                                         onChange={(e) => setSearch(e.target.value)}
                                     />
                                 </div>
-                                <Link href={route('admin.blogs.create')}>
-                                    <Button variant="primary">Add New Blog Post</Button>
-                                </Link>
                             </div>
-
                             <div className="overflow-x-auto">
                                 <table className="min-w-full divide-y divide-gray-200">
                                     <thead className="bg-gray-50">

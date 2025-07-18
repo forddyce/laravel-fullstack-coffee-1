@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Support\Facades\Auth;
+use Spatie\Sluggable\HasSlug;
+use Spatie\Sluggable\SlugOptions;
 
 class Product extends Model
 {
-    use HasFactory;
+    use HasFactory, HasSlug;
 
     protected $fillable = [
         'title',
@@ -35,5 +38,28 @@ class Product extends Model
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(ProductCategory::class, 'product_has_categories', 'product_id', 'category_id');
+    }
+
+    public function getSlugOptions(): SlugOptions
+    {
+        return SlugOptions::create()
+            ->generateSlugsFrom('title')
+            ->saveSlugsTo('slug')
+            ->doNotGenerateSlugsOnUpdate();
+    }
+
+    protected static function booted()
+    {
+        static::creating(function ($blogTag) {
+            if (Auth::check()) {
+                $blogTag->created_by = Auth::user()->email;
+            }
+        });
+
+        static::updating(function ($blogTag) {
+            if (Auth::check()) {
+                $blogTag->updated_by = Auth::user()->email;
+            }
+        });
     }
 }

@@ -97,7 +97,8 @@ class BlogController extends Controller
      */
     public function show(string $blogSlug)
     {
-        $blog = Blog::where('slug', $blogSlug)
+        $blog = Blog::with('tags')
+            ->where('slug', $blogSlug)
             ->where('is_active', true)
             ->where('published_date', '<=', now())
             ->first();
@@ -106,6 +107,24 @@ class BlogController extends Controller
             return response()->json(['message' => 'Blog post not found or not published.'], 404);
         }
 
-        return new BlogResource($blog);
+        $tagIds = $blog->tags->pluck('id');
+        $relatedBlogs = collect();
+
+        if ($tagIds->isNotEmpty()) {
+            $relatedBlogs = Blog::where('is_active', true)
+                ->where('published_date', '<=', now())
+                ->where('id', '!=', $blog->id)
+                ->whereHas('tags', function (Builder $query) use ($tagIds) {
+                    $query->whereIn('blog_tags.id', $tagIds);
+                })
+                ->orderBy('published_date', 'desc')
+                ->take(3)
+                ->get();
+        }
+
+        return response()->json([
+            'blog' => new BlogResource($blog),
+            'related_blogs' => BlogResource::collection($relatedBlogs),
+        ]);
     }
 }

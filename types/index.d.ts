@@ -54,6 +54,71 @@ export interface Blog {
     tags: BlogTag[];
 }
 
+export interface ProductCategory {
+    id: number;
+    title: string;
+    slug: string;
+    is_active: boolean;
+    created_by: string | null;
+    updated_by: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface Product {
+    id: number;
+    title: string;
+    slug: string;
+    primary_image: string | null;
+    content: string | null;
+    summary: string | null;
+    specifications: { name: string; value: string }[];
+    images: string[];
+    is_active: boolean;
+    favorite: number;
+    price: string;
+    created_by: string | null;
+    updated_by: string | null;
+    created_at: string;
+    updated_at: string;
+    categories: ProductCategory[];
+}
+
+export interface Agent {
+    id: number;
+    title: string;
+    content: string | null;
+    latitude: number;
+    longitude: number;
+    is_active: boolean;
+    created_by: string | null;
+    updated_by: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface AuctionItemInfo {
+    type: string;
+    score: string;
+    farmer: string;
+    origin: string;
+    process: string;
+    auction_price: number;
+}
+
+export interface AuctionItem {
+    id: number;
+    title: string;
+    slug: string;
+    info: AuctionItemInfo;
+    content: string | null;
+    is_active: boolean;
+    created_by: string | null;
+    updated_by: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
 declare module '@inertiajs/core' {
     interface PageProps {
         auth: {
@@ -63,6 +128,7 @@ declare module '@inertiajs/core' {
             success?: string;
             error?: string;
         };
+        ziggy: Config;
     }
 }
 

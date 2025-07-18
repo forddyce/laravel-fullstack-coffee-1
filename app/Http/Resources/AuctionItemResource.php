@@ -5,7 +5,7 @@ namespace App\Http\Resources;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProductCategoryResource extends JsonResource
+class AuctionItemResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -18,6 +18,8 @@ class ProductCategoryResource extends JsonResource
             'id' => $this->id,
             'title' => $this->title,
             'slug' => $this->slug,
+            'info' => is_array($this->info) ? $this->info : json_decode($this->info ?? '[]', true),
+            'content' => $this->content,
             'is_active' => $this->is_active,
             'created_by' => $this->created_by,
             'updated_by' => $this->updated_by,

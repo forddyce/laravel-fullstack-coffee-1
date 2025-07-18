@@ -63,7 +63,6 @@ export default function ImagePicker({ id, name, value, label, error, onChange, c
         lfmCallbackNameRef.current = uniqueCallbackName;
 
         window[uniqueCallbackName as any] = (image: any) => {
-            console.log({ image });
             onChange(image[0].url);
             delete window[uniqueCallbackName as any];
             lfmCallbackNameRef.current = null;

@@ -3,7 +3,6 @@
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
-use Illuminate\Validation\Rule;
 
 class ProductRequest extends FormRequest
 {
@@ -16,12 +15,6 @@ class ProductRequest extends FormRequest
     {
         $rules = [
             'title' => ['required', 'string', 'max:100'],
-            'slug' => [
-                'required',
-                'string',
-                'max:150',
-                Rule::unique('products')->ignore($this->route('product')),
-            ],
             'primary_image' => ['nullable', 'string'],
             'content' => ['nullable', 'string'],
             'summary' => ['nullable', 'string'],

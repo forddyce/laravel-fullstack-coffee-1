@@ -27,7 +27,25 @@ const sidebarItems: SidebarItem[] = [
                 href: 'admin.blog-tags.index',
                 permission: 'manage blog tags',
             },
+            {
+                name: 'Products',
+                href: 'admin.products.index',
+                permission: 'manage products',
+            },
+            {
+                name: 'Product Categories',
+                href: 'admin.product-categories.index',
+                permission: 'manage product categories',
+            },
         ],
+    },
+    {
+        name: 'Agents',
+        href: 'admin.agents.index',
+    },
+    {
+        name: 'Auction Items',
+        href: 'admin.auction-items.index',
     },
     {
         name: 'User Management',

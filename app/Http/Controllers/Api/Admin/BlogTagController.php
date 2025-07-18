@@ -28,14 +28,10 @@ class BlogTagController extends Controller implements HasMiddleware
             })
             ->paginate($request->query('perPage', 10));
 
-        if ($request->inertia()) {
-            return Inertia::render('BlogTag/Index', [
-                'blogTags' => BlogTagResource::collection($blogTags),
-                'filters' => $request->only(['search', 'sortBy', 'sortOrder', 'perPage']),
-            ]);
-        }
-
-        return BlogTagResource::collection($blogTags);
+        return Inertia::render('BlogTag/Index', [
+            'blogTags' => BlogTagResource::collection($blogTags),
+            'filters' => $request->only(['search', 'sortBy', 'sortOrder', 'perPage']),
+        ]);
     }
 
     public function create()

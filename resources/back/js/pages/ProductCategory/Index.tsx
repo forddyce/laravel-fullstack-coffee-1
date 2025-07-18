@@ -1,16 +1,16 @@
 import Button from '@/back/js/components/FormElements/Button';
 import TextInput from '@/back/js/components/FormElements/TextInput';
 import Pagination from '@/back/js/components/Pagination';
-import { useNotifications } from '@/back/js/hooks/useNotification';
 import AuthenticatedLayout from '@/back/js/layouts/AuthenticatedLayout';
 import { PageProps } from '@inertiajs/core';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
-import { BlogTag } from 'types';
+import type { ProductCategory } from 'types';
+import { useNotifications } from '../../hooks/useNotification';
 
-interface BlogTagIndexProps extends PageProps {
-    blogTags: {
-        data: BlogTag[];
+interface ProductCategoryIndexProps extends PageProps {
+    productCategories: {
+        data: ProductCategory[];
         links: {
             first: string | null;
             last: string | null;
@@ -34,8 +34,8 @@ interface BlogTagIndexProps extends PageProps {
     };
 }
 
-export default function BlogTagIndex() {
-    const { blogTags, filters } = usePage<BlogTagIndexProps>().props;
+export default function ProductCategoryIndex() {
+    const { productCategories, filters } = usePage<ProductCategoryIndexProps>().props;
     const { success, error, confirm } = useNotifications();
 
     const [search, setSearch] = useState(filters.search || '');
@@ -48,7 +48,7 @@ export default function BlogTagIndex() {
 
         debounceTimeoutRef.current = window.setTimeout(() => {
             router.get(
-                route('admin.blog-tags.index'),
+                route('admin.product-categories.index'),
                 { search },
                 {
                     preserveState: true,
@@ -67,14 +67,14 @@ export default function BlogTagIndex() {
 
     const handleDelete = (id: number) => {
         confirm(
-            'Are you sure you want to delete this blog tag? This action cannot be undone.',
+            'Are you sure you want to delete this product category? This action cannot be undone.',
             () => {
-                router.delete(route('admin.blog-tags.destroy', id), {
+                router.delete(route('admin.product-categories.destroy', id), {
                     onSuccess: () => {
-                        success('Blog Tag deleted successfully!');
+                        success('Product category deleted successfully!');
                     },
                     onError: () => {
-                        error('Failed to delete blog tag.');
+                        error('Failed to delete product category.');
                     },
                 });
             },
@@ -86,16 +86,16 @@ export default function BlogTagIndex() {
     };
 
     return (
-        <AuthenticatedLayout header={<p className="text-xl font-semibold leading-tight text-gray-800">Blog Tags</p>}>
-            <Head title="Blog Tags" />
+        <AuthenticatedLayout header={<p className="text-xl font-semibold leading-tight text-gray-800">Product Categories</p>}>
+            <Head title="Product Categories" />
 
             <div className="py-12">
                 <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
                     <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
                         <div className="p-6 text-gray-900">
                             <div className="mb-4 flex items-center justify-between">
-                                <Link href={route('admin.blog-tags.create')}>
-                                    <Button>Add New Tag</Button>
+                                <Link href={route('admin.product-categories.create')}>
+                                    <Button variant="primary">Add New Category</Button>
                                 </Link>
                                 <div className="w-1/3">
                                     <TextInput
@@ -109,6 +109,7 @@ export default function BlogTagIndex() {
                                     />
                                 </div>
                             </div>
+
                             <div className="overflow-x-auto">
                                 <table className="min-w-full divide-y divide-gray-200">
                                     <thead className="bg-gray-50">
@@ -137,31 +138,36 @@ export default function BlogTagIndex() {
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-200 bg-white">
-                                        {blogTags.data.length > 0 ? (
-                                            blogTags.data.map((tag) => (
-                                                <tr key={tag.id}>
-                                                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{tag.title}</td>
+                                        {productCategories.data.length > 0 ? (
+                                            productCategories.data.map((category) => (
+                                                <tr key={category.id}>
+                                                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{category.title}</td>
                                                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
-                                                        {tag.is_active ? 'Yes' : 'No'}
+                                                        {category.is_active ? 'Yes' : 'No'}
                                                     </td>
-                                                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{tag.created_at}</td>
+                                                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{category.created_at}</td>
                                                     <td className="whitespace-nowrap px-6 py-4 text-right text-sm font-medium">
                                                         <Link
-                                                            href={route('admin.blog-tags.edit', tag.id)}
+                                                            href={route('admin.product-categories.edit', category.id)}
                                                             className="mr-3 text-indigo-600 hover:text-indigo-900"
                                                         >
                                                             Edit
                                                         </Link>
-                                                        <button onClick={() => handleDelete(tag.id)} className="text-red-600 hover:text-red-900">
+                                                        <Button
+                                                            type="button"
+                                                            onClick={() => handleDelete(category.id)}
+                                                            variant="danger"
+                                                            className="inline-block"
+                                                        >
                                                             Delete
-                                                        </button>
+                                                        </Button>
                                                     </td>
                                                 </tr>
                                             ))
                                         ) : (
                                             <tr>
                                                 <td colSpan={4} className="px-6 py-4 text-center text-sm text-gray-500">
-                                                    No blog tags found.
+                                                    No product categories found.
                                                 </td>
                                             </tr>
                                         )}
@@ -169,7 +175,9 @@ export default function BlogTagIndex() {
                                 </table>
                             </div>
 
-                            {blogTags.meta.links && blogTags.meta.links.length > 3 && <Pagination links={blogTags.meta.links} filters={filters} />}
+                            {productCategories.meta.links && productCategories.meta.links.length > 3 && (
+                                <Pagination links={productCategories.meta.links} filters={filters} />
+                            )}
                         </div>
                     </div>
                 </div>
