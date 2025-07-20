@@ -14,6 +14,10 @@ export default {
             fontFamily: {
                 sans: ['Inter', ...defaultTheme.fontFamily.sans],
             },
+            height: {
+                'screen-75': '75vh',
+                'screen-50': '50vh',
+            },
         },
     },
     plugins: [],

@@ -88,13 +88,13 @@ export default function ClientHeader() {
                         <ChevronDown className="ml-1 h-4 w-4" />
                     </button>
                     {openDesktopDropdown === item.label && (
-                        <div className="absolute left-0 z-10 mt-2 w-48 rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5">
+                        <div className="ring-brand-primary absolute left-0 z-50 mt-5 w-48 bg-white shadow-lg ring-1 ring-opacity-5">
                             <div className="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
                                 {item.children.map((child) => (
                                     <Link
                                         key={child.label}
                                         href={child.href ? route(child.href) : '#'}
-                                        className="block px-4 py-2 text-sm uppercase text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+                                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900"
                                         role="menuitem"
                                     >
                                         {child.label}

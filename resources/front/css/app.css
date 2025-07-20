@@ -3,6 +3,8 @@
 
 @theme {
     --color-brand-primary: #a71f1f;
+    --screen-75: 75vh;
+    --screen-50: 50vh;
 }
 
 body {
