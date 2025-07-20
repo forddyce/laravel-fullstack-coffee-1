@@ -11,9 +11,18 @@ use Spatie\Permission\Models\Role;
 use App\Http\Resources\UserResource;
 use App\Http\Resources\RoleResource;
 use Inertia\Inertia;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 
-class UserController extends Controller
+class UserController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:manage users'),
+        ];
+    }
+
     public function index(Request $request)
     {
         $users = User::with('roles')

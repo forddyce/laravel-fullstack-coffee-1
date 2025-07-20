@@ -1,27 +1,97 @@
 <?php
 
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+use App\Http\Controllers\Client\HomeController;
+use App\Http\Controllers\Client\BlogController;
+use App\Http\Controllers\Client\ProductController;
+use App\Http\Controllers\Client\AuctionItemController;
+use App\Http\Controllers\Client\ProductCategoryController;
+use App\Http\Controllers\Client\BlogTagController;
+
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LogoutController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\Api\Admin\UserController;
-use App\Http\Controllers\Api\Admin\BlogTagController;
-use App\Http\Controllers\Api\Admin\BlogController;
-use App\Http\Controllers\Api\Admin\ProductCategoryController;
-use App\Http\Controllers\Api\Admin\ProductController;
-use App\Http\Controllers\Api\Admin\AgentController;
-use App\Http\Controllers\Api\Admin\AuctionItemController;
+use App\Http\Controllers\Api\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Api\Admin\BlogTagController as AdminBlogTagController;
+use App\Http\Controllers\Api\Admin\BlogController as AdminBlogController;
+use App\Http\Controllers\Api\Admin\ProductCategoryController as AdminProductCategoryController;
+use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Api\Admin\AgentController as AdminAgentController;
+use App\Http\Controllers\Api\Admin\AuctionItemController as AdminAuctionItemController;
 
-Route::get('/', function () {
-    return Inertia::render('front/pages/Index', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ])->rootView('front');
-})->name('home');
+Route::name('client.')->group(function () {
+
+    Route::redirect('/member/roast-calculator', '/roi-calculator', 301);
+    Route::get('/blog/{id}/{slug}', [BlogController::class, 'redirectToNewSlug'])->name('blogs.old_show');
+    Route::get('/product/{id}/{slug}', [ProductController::class, 'redirectToNewSlug'])->name('products.old_show');
+
+    Route::get('/', [HomeController::class, 'index'])->name('home');
+
+    Route::get('/blog', [BlogController::class, 'index'])->name('blogs.index');
+    Route::get('/blog/{slug}', [BlogController::class, 'show'])->name('blogs.show');
+    Route::get('/blog-tag/{slug}', [BlogTagController::class, 'show'])->name('blog-tags.show');
+
+    Route::get('/product-catalog', [ProductController::class, 'index'])->name('products.index');
+    Route::get('/product/{slug}', [ProductController::class, 'show'])->name('products.show');
+    Route::get('/product-category/{slug}', [ProductCategoryController::class, 'show'])->name('product-categories.show');
+
+    Route::get('/collaborations', [AuctionItemController::class, 'index'])->name('auction-items.index');
+    Route::get('/collaboration/{slug}', [AuctionItemController::class, 'show'])->name('auction-items.show');
+
+    Route::get('/about-us', function () {
+        return Inertia::render('About/Index')->rootView('front');
+    })->name('static.about-us');
+
+    Route::get('our-factory', function () {
+        return Inertia::render('About/Factory')->rootView('front');
+    })->name('static.our-factory');
+
+    Route::get('our-technician', function () {
+        return Inertia::render('About/Technician')->rootView('front');
+    })->name('static.our-technician');
+
+    Route::get('/coffee-lab', function () {
+        return Inertia::render('Menu/CoffeeLab')->rootView('front');
+    })->name('static.coffee-lab');
+
+    Route::get('/roast-and-brew', function () {
+        return Inertia::render('Menu/RoastAndBrew')->rootView('front');
+    })->name('static.roast-and-brew');
+
+    Route::get('/we-coffee-academy', function () {
+        return Inertia::render('Menu/WECoffeeAcademy')->rootView('front');
+    })->name('static.we-coffee-academy');
+
+    Route::get('/faq/w600i-w600i-se', function () {
+        return Inertia::render('FAQ/W600')->rootView('front');
+    })->name('static.faq.w600i-w600i-se');
+
+    Route::get('/faq/w3100-w3100-ir-w6100-w6100-ir-w12k-ir', function () {
+        return Inertia::render('FAQ/W3100')->rootView('front');
+    })->name('static.faq.w3100-w3100-ir-w6100-w6100-ir-w12k-ir');
+
+    Route::get('/faq/wexsuji', function () {
+        return Inertia::render('FAQ/WExSuji')->rootView('front');
+    })->name('static.faq.wexsuji');
+
+    Route::get('/faq/w10-w11', function () {
+        return Inertia::render('FAQ/W10')->rootView('front');
+    })->name('static.faq.w10-w11');
+
+    Route::get('/faq/w30', function () {
+        return Inertia::render('FAQ/W30')->rootView('front');
+    })->name('static.faq.w30');
+
+    Route::get('/calculator', function () {
+        return Inertia::render('RoastCalculator')->rootView('front');
+    })->name('static.calculator');
+
+    Route::get('/contact', function () {
+        return Inertia::render('Contact')->rootView('front');
+    })->name('static.contact');
+});
 
 Route::post('logout', [LogoutController::class, 'store'])->middleware('auth')->name('logout');
 
@@ -46,49 +116,12 @@ Route::prefix('admin')->name('admin.')->group(function () {
             Route::put('/password', [ProfileController::class, 'updatePassword'])->name('password.update');
         });
 
-        Route::middleware('permission:manage users')->group(function () {
-            Route::get('/users', [UserController::class, 'index'])->name('users.index');
-            Route::get('/users/create', [UserController::class, 'create'])->name('users.create');
-            Route::get('/users/{user}/edit', [UserController::class, 'edit'])->name('users.edit');
-            Route::resource('users', UserController::class);
-        });
-
-        Route::middleware('permission:manage blog tags')->group(function () {
-            Route::get('/blog-tags', [BlogTagController::class, 'index'])->name('blog-tags.index');
-            Route::get('/blog-tags/create', [BlogTagController::class, 'create'])->name('blog-tags.create');
-            Route::get('/blog-tags/{blog_tag}/edit', [BlogTagController::class, 'edit'])->name('blog-tags.edit');
-            Route::resource('blog-tags', BlogTagController::class);
-        });
-
-        Route::middleware('permission:manage blog posts')->group(function () {
-            Route::get('/blogs', [BlogController::class, 'index'])->name('blogs.index');
-            Route::get('/blogs/create', [BlogController::class, 'create'])->name('blogs.create');
-            Route::get('/blogs/{blog}/edit', [BlogController::class, 'edit'])->name('blogs.edit');
-            Route::resource('blogs', BlogController::class);
-        });
-
-        Route::middleware('permission:manage product categories')->group(function () {
-            Route::get('/product-categories', [ProductCategoryController::class, 'index'])->name('product-categories.index');
-            Route::get('/product-categories/create', [ProductCategoryController::class, 'create'])->name('product-categories.create');
-            Route::get('/product-categories/{product_category}/edit', [ProductCategoryController::class, 'edit'])->name('product-categories.edit');
-            Route::resource('product-categories', ProductCategoryController::class);
-        });
-
-        Route::middleware('permission:manage products')->group(function () {
-            Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-            Route::get('/products/create', [ProductController::class, 'create'])->name('products.create');
-            Route::get('/products/{product}/edit', [ProductController::class, 'edit'])->name('products.edit');
-            Route::resource('products', ProductController::class);
-        });
-
-        Route::get('/agents', [AgentController::class, 'index'])->name('agents.index');
-        Route::get('/agents/create', [AgentController::class, 'create'])->name('agents.create');
-        Route::get('/agents/{agent}/edit', [AgentController::class, 'edit'])->name('agents.edit');
-        Route::resource('agents', AgentController::class);
-
-        Route::get('/auction-items', [AuctionItemController::class, 'index'])->name('auction-items.index');
-        Route::get('/auction-items/create', [AuctionItemController::class, 'create'])->name('auction-items.create');
-        Route::get('/auction-items/{auction_item}/edit', [AuctionItemController::class, 'edit'])->name('auction-items.edit');
-        Route::resource('auction-items', AuctionItemController::class);
+        Route::resource('users', AdminUserController::class);
+        Route::resource('blog-tags', AdminBlogTagController::class);
+        Route::resource('blogs', AdminBlogController::class);
+        Route::resource('product-categories', AdminProductCategoryController::class);
+        Route::resource('products', AdminProductController::class);
+        Route::resource('agents', AdminAgentController::class);
+        Route::resource('auction-items', AdminAuctionItemController::class);
     });
 });
