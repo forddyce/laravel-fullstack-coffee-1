@@ -1,3 +1,4 @@
+import { Link } from '@inertiajs/react';
 import { Clock, Facebook, Instagram, Mail, MapPin, Phone, Youtube } from 'lucide-react';
 
 export default function ClientFooter() {
@@ -15,8 +16,6 @@ export default function ClientFooter() {
                             opportunity to try coffee the highest quality.
                         </p>
                     </div>
-
-                    <div></div>
 
                     <div>
                         <h3 className="mb-4 text-xl font-semibold">Contact Information</h3>
@@ -76,6 +75,52 @@ export default function ClientFooter() {
                                 </a>
                             </div>
                         </div>
+                    </div>
+
+                    <div>
+                        <h3 className="mb-4 text-xl font-semibold">Links</h3>
+                        <ul className="space-y-2">
+                            <li>
+                                <Link
+                                    href={route('client.blogs.index')}
+                                    className="text-sm text-gray-200 transition-colors duration-200 hover:text-white"
+                                >
+                                    Blog
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href={route('client.static.about-us')}
+                                    className="text-sm text-gray-200 transition-colors duration-200 hover:text-white"
+                                >
+                                    Our Journey
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href={route('client.static.roast-and-brew')}
+                                    className="text-sm text-gray-200 transition-colors duration-200 hover:text-white"
+                                >
+                                    Coffee Roaster
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href={route('client.static.calculator')}
+                                    className="text-sm text-gray-200 transition-colors duration-200 hover:text-white"
+                                >
+                                    ROI Calculator
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href={route('client.static.we-coffee-academy')}
+                                    className="text-sm text-gray-200 transition-colors duration-200 hover:text-white"
+                                >
+                                    WE Coffee Academy
+                                </Link>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 

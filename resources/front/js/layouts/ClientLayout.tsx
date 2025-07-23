@@ -10,7 +10,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
     return (
         <div className="flex min-h-screen flex-col bg-gray-50 antialiased">
             <ClientHeader />
-            <main className="container mx-auto flex-grow px-4 py-8 sm:px-6 lg:px-8">{children}</main>
+            <main>{children}</main>
             <ClientFooter />
         </div>
     );

@@ -17,7 +17,7 @@ class AgentController extends Controller
     public function index()
     {
         $agents = Agent::where('is_active', true)
-            ->orderBy('title', 'asc') // Order by title alphabetically
+            ->orderBy('title', 'asc')
             ->get();
 
         return AgentResource::collection($agents);

@@ -43,13 +43,13 @@ const features: FeatureCardData[] = [
         description:
             'Di WE Coffee, melalui koneksi yang luas dan almamater dari Coffee Academy, beliau memiliki inisiatif untuk menciptakan Gerakan yang bertujuan, baik secara internal maupun eksternal, untuk mencapai tujuan dan memecahkan masalah melalui kolaborasi berbagai, keterampilan, kekuatan dan perspektif di Industri Kopi Indonesia.',
         buttonText: 'Read More',
-        buttonHref: 'client.static.collaborations',
+        buttonHref: 'client.auction-items.index',
     },
 ];
 
 export default function FeatureSection() {
     return (
-        <section className="bg-white py-16">
+        <section className="container mx-auto flex-grow bg-white px-4 py-16 py-8 sm:px-6 lg:px-8">
             <div className="mx-auto">
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
                     {features.map((feature) => (
@@ -58,7 +58,7 @@ export default function FeatureSection() {
                             <h3 className="text-brand-primary mb-3 text-xl font-bold">{feature.title}</h3>
                             <p className="mb-6 flex-grow text-sm leading-relaxed text-gray-700">{feature.description}</p>
                             <Link
-                                href={feature.buttonHref}
+                                href={route(feature.buttonHref)}
                                 className="bg-brand-primary inline-block rounded-md px-6 py-2 text-sm font-medium uppercase text-white transition duration-300 ease-in-out hover:bg-red-700"
                             >
                                 {feature.buttonText}
