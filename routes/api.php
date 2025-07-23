@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Client\BlogController;
 use App\Http\Controllers\Api\Client\ProductController;
 use App\Http\Controllers\Api\Client\AgentController;
 use App\Http\Controllers\Api\Client\AuctionItemController;
+use App\Http\Controllers\Api\Client\SubscribeController;
 
 Route::middleware(['auth:sanctum'])->group(function () {
     Route::get('/user', function (Request $request) {
@@ -27,4 +28,6 @@ Route::prefix('client')->name('client.')->group(function () {
 
     Route::get('auction-items', [AuctionItemController::class, 'index'])->name('auction-items.index');
     Route::get('auction-items/{slug}', [AuctionItemController::class, 'show'])->name('auction-items.show');
+
+    Route::post('subscribe', [SubscribeController::class, 'createSub'])->name('subscribe');
 });

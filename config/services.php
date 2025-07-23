@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    'mailchimp' => [
+        'api_key' => env('MC_API_KEY'),
+        'list_id' => env('MC_LIST_ID'),
+    ],
+
 ];
