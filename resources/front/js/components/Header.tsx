@@ -6,6 +6,7 @@ interface ClientNavItem {
     label: string;
     href?: string;
     children?: ClientNavItem[];
+    isStaticLink?: boolean;
 }
 
 const clientNavItems: ClientNavItem[] = [
@@ -42,7 +43,7 @@ const clientNavItems: ClientNavItem[] = [
     },
     { label: 'Blog', href: 'client.blogs.index' },
     { label: 'ROI Calculator', href: 'client.static.calculator' },
-    { label: 'Contact', href: 'client.static.contact' },
+    { label: 'Forum WE', href: 'http://sharemytribe.me/551c4', isStaticLink: true },
 ];
 
 export default function ClientHeader() {
@@ -106,7 +107,7 @@ export default function ClientHeader() {
                 </div>
             );
         } else {
-            return (
+            return !item.isStaticLink ? (
                 <Link
                     key={item.label}
                     href={item.href ? route(item.href) : '#'}
@@ -114,6 +115,10 @@ export default function ClientHeader() {
                 >
                     {item.label}
                 </Link>
+            ) : (
+                <a key={item.label} href={item.href ? item.href : '#'} className="px-3 py-2 font-medium uppercase text-gray-600 hover:text-gray-900">
+                    {item.label}
+                </a>
             );
         }
     };
@@ -147,7 +152,7 @@ export default function ClientHeader() {
                 </div>
             );
         } else {
-            return (
+            return !item.isStaticLink ? (
                 <Link
                     key={item.label}
                     href={item.href ? route(item.href) : '#'}
@@ -156,6 +161,15 @@ export default function ClientHeader() {
                 >
                     {item.label}
                 </Link>
+            ) : (
+                <a
+                    key={item.label}
+                    href={item.href ? item.href : '#'}
+                    onClick={() => setIsMobileMenuOpen(false)}
+                    className="block px-4 py-2 text-base uppercase text-gray-700 hover:bg-gray-100"
+                >
+                    {item.label}
+                </a>
             );
         }
     };

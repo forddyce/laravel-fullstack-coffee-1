@@ -21,13 +21,14 @@ Route::prefix('client')->name('client.')->group(function () {
     Route::get('blog-tags/{slug}/blogs', [BlogController::class, 'blogsByTag'])->name('blog-tags.blogs');
 
     Route::get('products', [ProductController::class, 'index'])->name('products.index');
+    Route::get('products/by-ids', [ProductController::class, 'byIds'])->name('products.by-ids');
     Route::get('products/{slug}', [ProductController::class, 'show'])->name('products.show');
     Route::get('product-categories/{slug}/products', [ProductController::class, 'productsByCategory'])->name('product-categories.products');
 
     Route::get('agents', [AgentController::class, 'index'])->name('agents.index');
 
-    Route::get('auction-items', [AuctionItemController::class, 'index'])->name('auction-items.index');
-    Route::get('auction-items/{slug}', [AuctionItemController::class, 'show'])->name('auction-items.show');
+    Route::get('auction-items', [AuctionItemController::class, 'index'])->name('auction-items.api.index');
+    Route::get('auction-items/{slug}', [AuctionItemController::class, 'show'])->name('auction-items.api.show');
 
     Route::post('subscribe', [SubscribeController::class, 'createSub'])->name('subscribe');
 });

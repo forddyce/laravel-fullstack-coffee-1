@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Client;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Api\Client\AuctionItemController as ApiAuctionItemController;
-use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\JsonResponse;
 
 class AuctionItemController extends Controller
 {
@@ -17,27 +17,20 @@ class AuctionItemController extends Controller
         $this->apiAuctionItemController = $apiAuctionItemController;
     }
 
-    public function index(Request $request): Response
+    public function index()
     {
-        $apiResponse = $this->apiAuctionItemController->index($request);
-        $auctionItemsData = $apiResponse->toArray($request);
-
-        return Inertia::render('AuctionItem/Index', [
-            'auctionItems' => $auctionItemsData['data'],
-            'paginationLinks' => $auctionItemsData['links'],
-            'paginationMeta' => $auctionItemsData['meta'],
-            'filters' => $request->only(['search', 'page', 'perPage']),
-        ])->rootView('front');
+        return Inertia::render('AuctionItem/Index')->rootView('front');
     }
 
     public function show(string $slug): Response
     {
         $apiResponse = $this->apiAuctionItemController->show($slug);
-        $auctionItemData = $apiResponse->getData(true);
-
-        if (isset($auctionItemData['message']) && $auctionItemData['message'] === 'Auction item not found or not active.') {
-            abort(404, $auctionItemData['message']);
+        if ($apiResponse instanceof JsonResponse) {
+            $errorData = $apiResponse->getData(true);
+            abort($apiResponse->getStatusCode(), $errorData['message'] ?? 'Not Found');
         }
+
+        $auctionItemData = $apiResponse->toArray(request());
 
         return Inertia::render('AuctionItem/Show', [
             'auctionItem' => $auctionItemData,

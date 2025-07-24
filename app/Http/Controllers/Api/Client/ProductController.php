@@ -76,6 +76,29 @@ class ProductController extends Controller
     }
 
     /**
+     * List active products by a specific set of IDs.
+     * GET /api/client/products/by-ids?ids[]=1&ids[]=2&ids[]=3
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function byIds(Request $request)
+    {
+        $ids = $request->query('ids');
+
+        if (!is_array($ids) || empty($ids)) {
+            return ProductResource::collection(collect());
+        }
+
+        $products = Product::where('is_active', true)
+            ->whereIn('id', $ids)
+            ->orderByRaw('FIELD(id, ' . implode(',', $ids) . ')')
+            ->get();
+
+        return ProductResource::collection($products);
+    }
+
+    /**
      * List active products related to a specific category with pagination.
      * GET /api/client/product-categories/{slug}/products
      *

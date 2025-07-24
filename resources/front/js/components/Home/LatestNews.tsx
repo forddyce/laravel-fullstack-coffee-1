@@ -41,7 +41,7 @@ export default function LatestNewsSection() {
         <section className="bg-white py-16">
             <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                 <Link href={route('client.blogs.index')}>
-                    <h2 className="hover:text-brand-primary mb-12 text-center text-4xl font-bold text-gray-900">Latest News</h2>
+                    <h2 className="hover:text-brand-primary title-underline mb-12 text-center text-4xl font-bold text-gray-900">Latest News</h2>
                 </Link>
 
                 <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">

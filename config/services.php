@@ -40,4 +40,9 @@ return [
         'list_id' => env('MC_LIST_ID'),
     ],
 
+    'instagram' => [
+        'access_token' => env('INSTAGRAM_ACCESS_TOKEN'),
+        'base_url' => 'https://graph.instagram.com/v19.0/',
+    ],
+
 ];
