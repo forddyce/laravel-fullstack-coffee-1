@@ -39,7 +39,7 @@ class BlogController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->query('perPage', 10);
+        $perPage = $request->query('perPage', 9);
         $search = $request->query('search');
 
         $blogs = Blog::where('is_active', true)
@@ -50,7 +50,7 @@ class BlogController extends Controller
             ->orderBy('published_date', 'desc')
             ->paginate($perPage);
 
-        return BlogResource::collection($blogs);
+        return $blogs;
     }
 
     /**

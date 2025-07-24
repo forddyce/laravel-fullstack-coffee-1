@@ -44,18 +44,17 @@ class ProductController extends Controller
     public function show(string $slug): Response
     {
         $apiResponse = $this->apiProductController->show($slug);
+        $productDataFromApi = $apiResponse->getData(true);
 
-        if ($apiResponse instanceof \Illuminate\Http\JsonResponse) {
-            $errorData = $apiResponse->getData(true);
-            abort($apiResponse->getStatusCode(), $errorData['message'] ?? 'Not Found');
+        if (isset($productDataFromApi['message'])) {
+            abort($apiResponse->getStatusCode(), $productDataFromApi['message']);
         }
 
-        $productData = $apiResponse->toArray(request());
-        $relatedProductsData = $productData['related_products']->toArray(request());
+        $relatedProductsCollection = $productDataFromApi['related_products'];
 
         return Inertia::render('Product/Show', [
-            'product' => $productData['product'],
-            'relatedProducts' => $relatedProductsData['data'],
+            'product' =>  $productDataFromApi['product'],
+            'relatedProducts' => $relatedProductsCollection,
         ])->rootView('front');
     }
 

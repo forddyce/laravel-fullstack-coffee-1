@@ -119,6 +119,44 @@ export interface AuctionItem {
     updated_at: string;
 }
 
+export interface RoastCalculatorFilterState {
+    batchPerHour: number;
+    productionHourPerMonth: number;
+    retailSalesPercent: number;
+    wholesaleSalesPercent: number;
+    retailSalePrice: number;
+    wholesaleSalePrice: number;
+    beanAcquisitionPrice: number;
+    roastShrinkagePercent: number;
+    packagingRetailPrice: number;
+    packagingWholesalePrice: number;
+    workforceCost: number;
+    rentCost: number;
+    utilitiesCost: number;
+    maintenanceCost: number;
+}
+
+export interface MachineResult {
+    salesPerMonthKg: number;
+    avgRetailSales: number;
+    avgWholesaleSales: number;
+    salesPerMonthRetailRevenue: number;
+    salesPerMonthWholesaleRevenue: number;
+    cogsRetail: number;
+    cogsWholesale: number;
+    operationalTotal: number;
+    cleanProfit: number;
+    totalCoffeeProduction: number;
+    cleanProfitMachine: number;
+    roiTimeMachine: number;
+    bep: number;
+    roiPerYear: number;
+}
+
+export interface RoastCalculatorResultState {
+    [machineName: string]: MachineResult;
+}
+
 declare module '@inertiajs/core' {
     interface PageProps {
         auth: {

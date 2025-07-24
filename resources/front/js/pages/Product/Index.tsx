@@ -186,9 +186,6 @@ export default function ProductIndex() {
                                                 'No description available.'}
                                         </p>
                                         <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4">
-                                            <span className="text-brand-primary text-lg font-bold">
-                                                IDR {parseFloat(product.price).toLocaleString()}
-                                            </span>
                                             <a
                                                 href={`https://wa.link/ovrhsn`}
                                                 target="_blank"

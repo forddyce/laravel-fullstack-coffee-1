@@ -1,6 +1,6 @@
 import Accordion from '@/front/js/components/Accordion';
-import { grinderNordicItems, w3100Items, w600Items, wexsujiItems } from '@/front/js/faq';
 import ClientLayout from '@/front/js/layouts/ClientLayout';
+import { grinderNordicItems, w3100Items, w600Items, wexsujiItems } from '@/front/js/utils/faq';
 import { Head } from '@inertiajs/react';
 
 export default function AboutTechnicianPage() {
@@ -10,7 +10,7 @@ export default function AboutTechnicianPage() {
             <div className="py-8">
                 <div className="mx-auto max-w-4xl rounded-lg bg-white p-6 px-4 sm:px-6 lg:px-8">
                     <h1 className="title-underline mb-6 text-center text-4xl font-bold text-gray-900">Our Technician</h1>
-                    <div className="prose static-content max-w-none leading-relaxed text-gray-700">
+                    <div className="static-content prose max-w-none leading-relaxed text-gray-700">
                         <p>
                             Dengan rekam jejak penjualan yang terbukti dari banyaknya Roasting Machine yang terjual dari hulu hingga ke hilir, WE
                             Coffee Roaster berkomitmen untuk menyediakan layanan pelanggan yang dapat diandalkan.

@@ -24,9 +24,19 @@ class BlogController extends Controller
         $blogsData = $apiResponse->toArray($request);
 
         return Inertia::render('Blog/Index', [
-            'blogs' => $blogsData['data'],
-            'paginationLinks' => $blogsData['links'],
-            'paginationMeta' => $blogsData['meta'],
+            'blogs' => [
+                'data' => $blogsData['data'],
+                'links' => $blogsData['links'],
+                'meta' => [
+                    'current_page' => $blogsData['current_page'],
+                    'from' => $blogsData['from'],
+                    'to' => $blogsData['to'],
+                    'total' => $blogsData['total'],
+                    'per_page' => $blogsData['per_page'],
+                    'links' => $blogsData['links'],
+                    'path' => $blogsData['path'],
+                ],
+            ],
             'filters' => $request->only(['search', 'page', 'perPage']),
         ])->rootView('front');
     }
@@ -34,15 +44,15 @@ class BlogController extends Controller
     public function show(string $slug): Response
     {
         $apiResponse = $this->apiBlogController->show($slug);
-        $blogData = $apiResponse->getData(true);
+        $blogDataFromApi = $apiResponse->getData(true);
 
-        if (isset($blogData['message']) && $blogData['message'] === 'Blog post not found or not published.') {
-            abort(404, $blogData['message']);
+        if (isset($blogDataFromApi['message'])) {
+            abort($apiResponse->getStatusCode(), $blogDataFromApi['message']);
         }
 
         return Inertia::render('Blog/Show', [
-            'blog' => $blogData['blog'],
-            'relatedBlogs' => $blogData['related_blogs'],
+            'blog' => $blogDataFromApi['blog'],
+            'relatedBlogs' => $blogDataFromApi['related_blogs'],
         ])->rootView('front');
     }
 

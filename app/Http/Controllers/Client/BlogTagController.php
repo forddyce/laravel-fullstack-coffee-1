@@ -28,9 +28,11 @@ class BlogTagController extends Controller
 
         return Inertia::render('Blog/Tag/Show', [
             'tag' => $tagData['tag'],
-            'blogs' => $tagData['blogs']['data'],
-            'paginationLinks' => $tagData['blogs']['links'],
-            'paginationMeta' => $tagData['blogs']['meta'],
+            'blogs' => [
+                'data' => $tagData['blogs']['data'],
+                'links' => $tagData['blogs']['links'],
+                'meta' => $tagData['blogs']['meta'],
+            ],
             'filters' => $request->only(['page', 'perPage']),
         ])->rootView('front');
     }

@@ -22,7 +22,7 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->query('perPage', 10);
+        $perPage = $request->query('perPage', 9);
         $search = $request->query('search');
         $sortBy = $request->query('sortBy', 'favorite');
         $sortOrder = $request->query('sortOrder', 'desc');

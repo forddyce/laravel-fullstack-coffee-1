@@ -1,7 +1,7 @@
 import Accordion from '@/front/js/components/Accordion';
 import ClientLayout from '@/front/js/layouts/ClientLayout';
 
-import { w3100Items as items } from '@/front/js/faq';
+import { w3100Items as items } from '@/front/js/utils/faq';
 import { Head } from '@inertiajs/react';
 
 export default function FaqW3100Page() {
@@ -13,7 +13,7 @@ export default function FaqW3100Page() {
                     <h1 className="title-underline mb-6 text-center text-4xl font-bold text-gray-900">
                         W3100 / W3100 IR / W6100 / W6100 IR / W12k IR
                     </h1>
-                    <div className="prose static-content max-w-none leading-relaxed text-gray-700">
+                    <div className="static-content prose max-w-none leading-relaxed text-gray-700">
                         {items.map((item, index) => (
                             <Accordion key={index} question={item.title} answer={item.text} />
                         ))}
