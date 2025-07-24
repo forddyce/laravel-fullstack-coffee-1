@@ -7,6 +7,7 @@ use App\Http\Controllers\Api\Client\ProductController as ApiProductController;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Http\JsonResponse;
 
 class ProductCategoryController extends Controller
 {
@@ -22,16 +23,14 @@ class ProductCategoryController extends Controller
         $apiResponse = $this->apiProductController->productsByCategory($request, $slug);
         $categoryData = $apiResponse->getData(true);
 
-        if (isset($categoryData['message']) && $categoryData['message'] === 'Product category not found or not active.') {
-            abort(404, $categoryData['message']);
-        }
-
-        return Inertia::render('Product/Category/Show', [
+        return Inertia::render('Product/Category/Index', [
             'category' => $categoryData['category'],
-            'products' => $categoryData['products']['data'],
-            'paginationLinks' => $categoryData['products']['links'],
-            'paginationMeta' => $categoryData['products']['meta'],
-            'filters' => $request->only(['page', 'perPage']),
+            'products' => [
+                'data' => $categoryData['products']['data'],
+                'links' => $categoryData['products']['links'],
+                'meta' => $categoryData['products']['meta']
+            ],
+            'filters' => $request->only(['page', 'perPage', 'search']),
         ])->rootView('front');
     }
 }

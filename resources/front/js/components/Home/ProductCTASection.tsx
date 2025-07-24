@@ -20,7 +20,7 @@ export default function ProductCTASection() {
             try {
                 const params = new URLSearchParams();
                 featuredProductIds.forEach((id) => params.append('ids[]', id.toString()));
-                const response = await axios.get(route('client.products.by-ids') + `?${params.toString()}`);
+                const response = await axios.get(route('api.client.products.by-ids') + `?${params.toString()}`);
                 setProducts(response.data);
                 setLoading(false);
             } catch (err) {
@@ -79,7 +79,6 @@ export default function ProductCTASection() {
                         ))}
                 </div>
 
-                {/* View Catalog Button (below the cards) */}
                 <div className="mt-12 text-center">
                     <Link
                         href={route('client.products.index')}

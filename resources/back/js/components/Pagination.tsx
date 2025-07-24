@@ -47,7 +47,7 @@ export default function Pagination({ links, filters }: PaginationProps) {
                         key={index}
                         className={`relative inline-flex items-center px-4 py-2 text-sm font-medium ${
                             link.active
-                                ? 'z-10 bg-indigo-600 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
+                                ? 'bg-brand-primary z-10 text-white focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2'
                                 : 'text-gray-700 ring-1 ring-inset ring-gray-300 hover:bg-gray-50 focus:outline-offset-0'
                         } ${link.url === null ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'} ${index === 0 ? 'rounded-l-md' : ''} ${index === links.length - 1 ? 'rounded-r-md' : ''} ${index > 0 && index < links.length - 1 ? 'border-r border-gray-300' : ''} `}
                     >

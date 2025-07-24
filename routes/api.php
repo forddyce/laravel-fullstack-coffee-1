@@ -14,7 +14,7 @@ Route::middleware(['auth:sanctum'])->group(function () {
     });
 });
 
-Route::prefix('client')->name('client.')->group(function () {
+Route::prefix('client')->name('api.client.')->group(function () {
     Route::get('blogs/latest', [BlogController::class, 'latest'])->name('blogs.latest');
     Route::get('blogs', [BlogController::class, 'index'])->name('blogs.index');
     Route::get('blogs/{slug}', [BlogController::class, 'show'])->name('blogs.show');
@@ -24,11 +24,12 @@ Route::prefix('client')->name('client.')->group(function () {
     Route::get('products/by-ids', [ProductController::class, 'byIds'])->name('products.by-ids');
     Route::get('products/{slug}', [ProductController::class, 'show'])->name('products.show');
     Route::get('product-categories/{slug}/products', [ProductController::class, 'productsByCategory'])->name('product-categories.products');
+    Route::get('product-categories', [ProductController::class, 'listAllActiveCategories'])->name('product-categories.index_all');
 
     Route::get('agents', [AgentController::class, 'index'])->name('agents.index');
 
-    Route::get('auction-items', [AuctionItemController::class, 'index'])->name('auction-items.api.index');
-    Route::get('auction-items/{slug}', [AuctionItemController::class, 'show'])->name('auction-items.api.show');
+    Route::get('auction-items', [AuctionItemController::class, 'index'])->name('auction-items.index');
+    Route::get('auction-items/{slug}', [AuctionItemController::class, 'show'])->name('auction-items.show');
 
     Route::post('subscribe', [SubscribeController::class, 'createSub'])->name('subscribe');
 });

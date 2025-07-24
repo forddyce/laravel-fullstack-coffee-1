@@ -24,9 +24,19 @@ class ProductController extends Controller
         $productsData = $apiResponse->toArray($request);
 
         return Inertia::render('Product/Index', [
-            'products' => $productsData['data'],
-            'paginationLinks' => $productsData['links'],
-            'paginationMeta' => $productsData['meta'],
+            'products' => [
+                'data' => $productsData['data'],
+                'links' => $productsData['links'],
+                'meta' => [
+                    'current_page' => $productsData['current_page'],
+                    'from' => $productsData['from'],
+                    'to' => $productsData['to'],
+                    'total' => $productsData['total'],
+                    'per_page' => $productsData['per_page'],
+                    'links' => $productsData['links'],
+                    'path' => $productsData['path'],
+                ],
+            ],
             'filters' => $request->only(['search', 'page', 'perPage', 'sortBy', 'sortOrder']),
         ])->rootView('front');
     }
@@ -34,15 +44,18 @@ class ProductController extends Controller
     public function show(string $slug): Response
     {
         $apiResponse = $this->apiProductController->show($slug);
-        $productData = $apiResponse->getData(true);
 
-        if (isset($productData['message']) && $productData['message'] === 'Product not found or not active.') {
-            abort(404, $productData['message']);
+        if ($apiResponse instanceof \Illuminate\Http\JsonResponse) {
+            $errorData = $apiResponse->getData(true);
+            abort($apiResponse->getStatusCode(), $errorData['message'] ?? 'Not Found');
         }
+
+        $productData = $apiResponse->toArray(request());
+        $relatedProductsData = $productData['related_products']->toArray(request());
 
         return Inertia::render('Product/Show', [
             'product' => $productData['product'],
-            'relatedProducts' => $productData['related_products'],
+            'relatedProducts' => $relatedProductsData['data'],
         ])->rootView('front');
     }
 

@@ -12,7 +12,7 @@ export default function RoastAndBrewPage() {
     useEffect(() => {
         const fetchAgents = async () => {
             try {
-                const response = await axios.get(route('client.agents.index'));
+                const response = await axios.get(route('api.client.agents.index'));
                 setAgents(response.data);
                 setLoading(false);
             } catch (err) {

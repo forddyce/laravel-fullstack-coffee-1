@@ -33,7 +33,7 @@ export const useSubscribeForm = () => {
             setFormState((prevState) => ({ ...prevState, processing: true, error: null, success: null }));
 
             try {
-                const response = await axios.post(route('client.subscribe'), { email: formState.email });
+                const response = await axios.post(route('api.client.subscribe'), { email: formState.email });
 
                 const { type, message } = response.data;
 

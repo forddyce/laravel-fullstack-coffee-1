@@ -34,7 +34,7 @@ class ProductController extends Controller
             ->orderBy($sortBy, $sortOrder)
             ->paginate($perPage);
 
-        return ProductResource::collection($products);
+        return $products;
     }
 
     /**
@@ -117,9 +117,13 @@ class ProductController extends Controller
         }
 
         $perPage = $request->query('perPage', 10);
+        $search = $request->query('search');
 
         $products = $category->products()
             ->where('is_active', true)
+            ->when($search, function (Builder $query, $search) {
+                $query->where('title', 'like', '%' . $search . '%');
+            })
             ->orderBy('favorite', 'desc')
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);
@@ -128,5 +132,19 @@ class ProductController extends Controller
             'category' => new ProductCategoryResource($category),
             'products' => ProductResource::collection($products)->response()->getData(true)
         ]);
+    }
+
+    /**
+     * GET /api/client/product-categories
+     *
+     * @return \Illuminate\Http\Resources\Json\AnonymousResourceCollection
+     */
+    public function listAllActiveCategories()
+    {
+        $categories = ProductCategory::where('is_active', true)
+            ->orderBy('title', 'asc')
+            ->get();
+
+        return ProductCategoryResource::collection($categories);
     }
 }

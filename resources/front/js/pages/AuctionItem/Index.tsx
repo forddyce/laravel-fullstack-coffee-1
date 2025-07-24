@@ -12,7 +12,7 @@ export default function AuctionItemIndexPage() {
     useEffect(() => {
         const fetchAuctionItems = async () => {
             try {
-                const response = await axios.get(route('client.auction-items.api.index'), {
+                const response = await axios.get(route('api.client.auction-items.index'), {
                     params: { perPage: 999 },
                 });
                 setAuctionItems(response.data.data);

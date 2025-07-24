@@ -12,7 +12,7 @@ export default function LatestNewsSection() {
     useEffect(() => {
         const fetchLatestBlogs = async () => {
             try {
-                const response = await axios.get(route('client.blogs.latest'));
+                const response = await axios.get(route('api.client.blogs.latest'));
                 setLatestBlogs(response.data);
                 setLoading(false);
             } catch (err) {

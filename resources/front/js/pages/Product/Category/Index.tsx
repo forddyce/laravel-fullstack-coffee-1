@@ -4,11 +4,11 @@ import Pagination from '@/back/js/components/Pagination';
 import ClientLayout from '@/front/js/layouts/ClientLayout';
 import type { PageProps } from '@inertiajs/core';
 import { Head, Link, router, usePage } from '@inertiajs/react';
-import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
 import { Product, ProductCategory } from 'types';
 
-interface ProductIndexProps extends PageProps {
+interface ProductCategoryShowProps extends PageProps {
+    category: ProductCategory;
     products: {
         data: Product[];
         links: { url: string | null; label: string; active: boolean }[];
@@ -32,29 +32,14 @@ interface ProductIndexProps extends PageProps {
         sortBy?: string;
         sortOrder?: string;
         perPage?: number;
-        category_slug?: string;
     };
 }
 
-export default function ProductIndex() {
-    const { products, filters } = usePage<ProductIndexProps>().props;
+export default function ProductCategoryShow() {
+    const { category, products, filters } = usePage<ProductCategoryShowProps>().props;
 
     const [search, setSearch] = useState(filters.search || '');
-    const [activeCategorySlug, setActiveCategorySlug] = useState(filters.category_slug || 'all');
-    const [availableCategories, setAvailableCategories] = useState<ProductCategory[]>([]);
     const debounceTimeoutRef = useRef<number | null>(null);
-
-    useEffect(() => {
-        const fetchCategories = async () => {
-            try {
-                const response = await axios.get(route('api.client.product-categories.index_all'));
-                setAvailableCategories(response.data); // Assuming data is nested under 'data'
-            } catch (err) {
-                console.error('Failed to load categories:', err);
-            }
-        };
-        fetchCategories();
-    }, []);
 
     useEffect(() => {
         if (debounceTimeoutRef.current) {
@@ -63,7 +48,7 @@ export default function ProductIndex() {
 
         debounceTimeoutRef.current = window.setTimeout(() => {
             router.get(
-                route('client.products.index'),
+                route('client.product-categories.show', category.slug),
                 { ...filters, search: search },
                 {
                     preserveState: true,
@@ -78,81 +63,50 @@ export default function ProductIndex() {
                 clearTimeout(debounceTimeoutRef.current);
             }
         };
-    }, [search]);
-
-    const handleCategoryFilter = (categorySlug: string) => {
-        setActiveCategorySlug(categorySlug);
-        if (categorySlug === 'all') {
-            router.get(
-                route('client.products.index'),
-                { ...filters, category_slug: undefined },
-                {
-                    preserveState: true,
-                    replace: true,
-                    preserveScroll: true,
-                },
-            );
-        } else {
-            router.get(
-                route('client.product-categories.show', categorySlug),
-                { ...filters },
-                {
-                    preserveState: true,
-                    replace: true,
-                    preserveScroll: true,
-                },
-            );
-        }
-    };
+    }, [search, category.slug]); // Re-run effect when search or category changes
 
     return (
         <ClientLayout>
-            <Head title="Products" />
+            <Head title={`${category.title} Products`} />
 
             <section className="bg-brand-primary py-16 text-center text-white">
                 <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
-                    <h1 className="mb-4 text-5xl font-extrabold md:text-6xl">Our Catalog</h1>
-                    <p className="text-lg leading-relaxed md:text-xl">Explore our wide range of premium coffee beans and roasting machines.</p>
+                    <h1 className="mb-4 text-5xl font-extrabold md:text-6xl">{category.title}</h1>
+                    <p className="text-lg leading-relaxed md:text-xl">Discover our products in the "{category.title}" category.</p>
                 </div>
             </section>
 
             <section className="bg-gray-50 py-8">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-8 flex flex-col items-center justify-between gap-4 md:flex-row">
+                        {/* "All" button and current category name */}
                         <div className="flex flex-wrap justify-center gap-2 md:justify-start">
                             <Button
-                                onClick={() => handleCategoryFilter('all')}
-                                variant={activeCategorySlug === 'all' ? 'primary' : 'secondary'}
+                                onClick={() => router.get(route('client.products.index'))} // Link back to all products
+                                variant={'secondary'}
                                 className="text-sm uppercase"
                             >
-                                All
+                                &larr; All Products
                             </Button>
-                            {availableCategories.map((category) => (
-                                <Button
-                                    key={category.id}
-                                    onClick={() => handleCategoryFilter(category.slug)}
-                                    variant={activeCategorySlug === category.slug ? 'primary' : 'secondary'}
-                                    className="text-sm uppercase"
-                                >
-                                    {category.title}
-                                </Button>
-                            ))}
+                            <Button variant={'primary'} className="cursor-default text-sm uppercase">
+                                {category.title}
+                            </Button>
                         </div>
 
+                        {/* Search Bar */}
                         <div className="w-full md:w-1/3">
                             <TextInput
-                                id="product-search"
+                                id="product-category-search"
                                 type="text"
                                 name="search"
                                 value={search}
                                 className="block w-full"
-                                placeholder="Search products by title..."
+                                placeholder={`Search in ${category.title}...`}
                                 onChange={(e) => setSearch(e.target.value)}
                             />
                         </div>
                     </div>
 
-                    {/* Product List */}
                     {products.data.length > 0 ? (
                         <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
                             {products.data.map((product) => (
@@ -186,11 +140,9 @@ export default function ProductIndex() {
                                                 'No description available.'}
                                         </p>
                                         <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4">
-                                            <span className="text-brand-primary text-lg font-bold">
-                                                IDR {parseFloat(product.price).toLocaleString()}
-                                            </span>
+                                            <span className="text-brand-primary text-lg font-bold">${parseFloat(product.price).toFixed(2)}</span>
                                             <a
-                                                href={`https://wa.link/ovrhsn`}
+                                                href={`https://wa.me/YOUR_WHATSAPP_NUMBER?text=Saya%20tertarik%20dengan%20produk%20${product.title}.`}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="inline-flex items-center rounded-md bg-green-500 px-4 py-2 text-xs font-medium uppercase text-white transition duration-300 ease-in-out hover:bg-green-600"
@@ -203,11 +155,10 @@ export default function ProductIndex() {
                             ))}
                         </div>
                     ) : (
-                        <p className="py-8 text-center text-gray-500">No products found matching your criteria.</p>
+                        <p className="py-8 text-center text-gray-500">No products found in this category matching your criteria.</p>
                     )}
 
-                    {/* Pagination */}
-                    {products.links && products.links.length > 3 && <Pagination links={products.links} filters={filters} />}
+                    {products.meta.links && products.meta.links.length > 3 && <Pagination links={products.meta.links} filters={filters} />}
                 </div>
             </section>
         </ClientLayout>
