@@ -21,9 +21,9 @@ export const defaultMachineUnit = {
 
 // Default prices (Rp)
 export const defaultMachinePrice = {
-    w1: 45000000,
-    w3: 89000000,
-    w3100: 78000000,
-    w6100: 112000000,
-    w12: 165000000,
+    w1: 49000000,
+    w3: 98000000,
+    w3100: 84000000,
+    w6100: 123000000,
+    w12: 175000000,
 };

@@ -7,6 +7,7 @@ interface RoastCalculatorResultProps {
 }
 
 const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [machineUnit, setMachineUnit] = useState<Record<string, number>>(defaultMachineUnit);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [machinePrice, setMachinePrice] = useState<Record<string, number>>(defaultMachinePrice);
@@ -21,6 +22,10 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                 salesPerMonthWholesaleRevenue: 0,
                 cogsRetail: 0,
                 cogsWholesale: 0,
+                operationalWorkforceCost: 0,
+                operationalRentCost: 0,
+                operationalUtilitiesCost: 0,
+                operationalMaintenanceCost: 0,
                 operationalTotal: 0,
                 cleanProfit: 0,
                 totalCoffeeProduction: 0,
@@ -42,28 +47,27 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                 const totalProductionPerMonth =
                     data.batchPerHour * data.productionHourPerMonth * machineCapacity -
                     (data.roastShrinkagePercent / 100) * (data.batchPerHour * data.productionHourPerMonth);
-                const roastedBeanProduction = totalProductionPerMonth * (1 - data.roastShrinkagePercent / 100);
 
-                const retailKg = (data.retailSalesPercent / 100) * result[m].salesPerMonthKg;
-                const wholesaleKg = roastedBeanProduction * (data.wholesaleSalesPercent / 100);
+                const retailKg = (data.retailSalesPercent / 100) * totalProductionPerMonth;
+                const wholesaleKg = (data.wholesaleSalesPercent / 100) * totalProductionPerMonth;
+                const cogsCalculation = data.beanAcquisitionPrice - data.beanAcquisitionPrice * (data.roastShrinkagePercent / 100);
+                const cogsRetail = (cogsCalculation + data.packagingRetailPrice) * retailKg;
+                const cogsWholesale = (cogsCalculation + data.packagingWholesalePrice) * wholesaleKg;
+
+                const totalOperationalCost = data.workforceCost + data.rentCost + data.utilitiesCost + data.maintenanceCost;
 
                 const retailRevenue = retailKg * data.retailSalePrice;
                 const wholesaleRevenue = wholesaleKg * data.wholesaleSalePrice;
                 const totalRevenue = retailRevenue + wholesaleRevenue;
-
-                const totalBeanCost = roastedBeanProduction * data.beanAcquisitionPrice;
-                const totalPackagingCost = retailKg * data.packagingRetailPrice + wholesaleKg * data.packagingWholesalePrice;
-                const totalOperationalCost = data.workforceCost + data.rentCost + data.utilitiesCost + data.maintenanceCost;
-
-                const totalCost = totalBeanCost + totalPackagingCost + totalOperationalCost;
-
-                const netProfit = totalRevenue - totalCost;
+                const netProfit = totalRevenue - cogsRetail - cogsWholesale - totalOperationalCost;
 
                 const priceOfMachine = machinePrice[m];
-                const cleanProfitMachine = netProfit;
-                const roiTimeMachine = cleanProfitMachine > 0 ? priceOfMachine / (cleanProfitMachine / 12) : 0;
-                const bep = cleanProfitMachine > 0 ? (totalCost / totalRevenue) * 100 : 0;
-                const roiPerYear = netProfit * 12;
+
+                const roastedBeanProduction = (machineCapacity - machineCapacity * (data.roastShrinkagePercent / 100)) * data.batchPerHour;
+                const cleanProfitMachine = netProfit / data.productionHourPerMonth;
+                const roiTimeMachine = Math.round(priceOfMachine / cleanProfitMachine);
+                const bep = cleanProfitMachine > 0 ? Math.round(priceOfMachine / netProfit) : 0;
+                const roiPerYear = Math.round((netProfit * 12) / (priceOfMachine * 0.01));
 
                 newResults[m] = {
                     salesPerMonthKg: totalProductionPerMonth,
@@ -71,8 +75,12 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                     avgWholesaleSales: wholesaleKg,
                     salesPerMonthRetailRevenue: retailRevenue,
                     salesPerMonthWholesaleRevenue: wholesaleRevenue,
-                    cogsRetail: roastedBeanProduction * data.beanAcquisitionPrice,
-                    cogsWholesale: roastedBeanProduction * data.beanAcquisitionPrice,
+                    cogsRetail: cogsRetail,
+                    cogsWholesale: cogsWholesale,
+                    operationalWorkforceCost: data.workforceCost,
+                    operationalRentCost: data.rentCost,
+                    operationalUtilitiesCost: data.utilitiesCost,
+                    operationalMaintenanceCost: data.maintenanceCost,
                     operationalTotal: totalOperationalCost,
                     cleanProfit: netProfit,
                     totalCoffeeProduction: roastedBeanProduction,
@@ -82,49 +90,19 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                     roiPerYear: roiPerYear,
                 };
             });
+
             setResult(newResults);
         };
 
         calculateResults();
     }, [data, machineUnit, machinePrice]);
 
-    const MachineUnitRows = () => {
-        return (
-            <tr>
-                <td className="px-6 py-4 text-sm font-medium text-gray-900">Kapasitas Mesin (kg)</td>
-                {machines.map((m: string, index: number) => {
-                    return (
-                        <Fragment key={`row-input-machine-unit-${m}-${index}`}>
-                            <td className="px-3 py-2">
-                                <input
-                                    type="number"
-                                    className="block w-full rounded-md border-gray-300 bg-white text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                    disabled
-                                    value={machineUnit[m]}
-                                    onChange={(e) => {
-                                        let value = parseInt(e.target.value);
-                                        if (isNaN(value) || value < 1) value = 1;
-                                        setMachineUnit((prev) => ({
-                                            ...prev,
-                                            [m]: value,
-                                        }));
-                                    }}
-                                />
-                            </td>
-                            <td className="px-3 py-2 text-sm text-gray-700">kg</td>
-                        </Fragment>
-                    );
-                })}
-            </tr>
-        );
-    };
-
     const formatRp = useCallback((value: number | string) => {
         if (typeof value === 'string') {
             value = parseFloat(value.replace(/[^0-9.-]+/g, ''));
         }
-        if (isNaN(value) || value === null) return 'N/A';
-        return 'Rp ' + value.toLocaleString('id-ID');
+        if (typeof value !== 'number' || value === null) return 'N/A';
+        return 'Rp ' + Math.round(value).toLocaleString('id-ID');
     }, []);
 
     const formatPercent = useCallback((value: number | string) => {
@@ -134,6 +112,30 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
         if (isNaN(value) || value === null) return 'N/A';
         return value.toFixed(2) + '%';
     }, []);
+
+    // const MachinePriceRows = () => {
+    //     return (
+    //         <tr>
+    //             <td className="px-6 py-4 text-sm font-medium text-gray-900">Harga Perolehan Mesin Roaster</td>
+    //             {machines.map((m: string, index: number) => {
+    //                 return (
+    //                     <Fragment key={`row-input-machine-price-${m}`}>
+    //                         <td className="px-3 py-2">
+    //                             <NumericFormat
+    //                                 allowNegative={false}
+    //                                 className="block w-full rounded-md border-gray-300 bg-white shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
+    //                                 value={machinePrice[m]}
+    //                                 thousandSeparator=","
+    //                                 onValueChange={handleMachineNumericChange(m, setMachinePrice)}
+    //                             />
+    //                         </td>
+    //                         <td className="px-3 py-2 text-sm text-gray-700">Rp</td>
+    //                     </Fragment>
+    //                 );
+    //             })}
+    //         </tr>
+    //     );
+    // };
 
     return (
         <div className="max-h-150 overflow-x-auto border border-gray-200">
@@ -147,7 +149,7 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                             <th
                                 key={m}
                                 colSpan={2}
-                                className="bg-brand-primary w-1/6 px-3 py-3 text-center text-xs font-bold uppercase tracking-wider text-white"
+                                className="bg-brand-primary w-1/6 px-3 py-3 text-right text-xs font-bold uppercase tracking-wider text-white"
                             >
                                 {machineDisplayNames[m as keyof typeof machineDisplayNames]}
                             </th>
@@ -155,9 +157,18 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                     </tr>
                 </thead>
                 <tbody className="h-96 divide-y divide-gray-200 overflow-y-auto bg-white">
-                    {MachineUnitRows()}
                     <tr>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Penjualan Kopi Roasted Per Bulan</td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Kapasitas Mesin (kg)</td>
+                        {machines.map((m) => (
+                            <Fragment key={`sales-per-month-kg-${m}`}>
+                                <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
+                                    {machineUnit[m]}
+                                </td>
+                            </Fragment>
+                        ))}
+                    </tr>
+                    <tr>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Penjualan Kopi Roasted Per Bulan (Kg)</td>
                         {machines.map((m) => (
                             <Fragment key={`sales-per-month-kg-${m}`}>
                                 <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
@@ -211,7 +222,7 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                     </tr>
 
                     <tr>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Total Revenue Retail per Bulan</td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Total Penjualan Retail Per Bulan</td>
                         {machines.map((m) => (
                             <Fragment key={`sales-per-month-retail-revenue-${m}`}>
                                 <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
@@ -222,7 +233,7 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                     </tr>
 
                     <tr>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Total Revenue Wholesale per Bulan</td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Total Penjualan Wholesale Per Bulan</td>
                         {machines.map((m) => (
                             <Fragment key={`sales-per-month-wholesale-revenue-${m}`}>
                                 <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
@@ -233,7 +244,7 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                     </tr>
 
                     <tr>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">HPP Retail (Harga Pokok Produksi Retail)</td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">COGS Retail kopi</td>
                         {machines.map((m) => (
                             <Fragment key={`cogs-retail-${m}`}>
                                 <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
@@ -244,7 +255,7 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                     </tr>
 
                     <tr>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">HPP Wholesale (Harga Pokok Produksi Wholesale)</td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">COGS Wholesale kopi</td>
                         {machines.map((m) => (
                             <Fragment key={`cogs-wholesale-${m}`}>
                                 <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
@@ -261,7 +272,57 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                     </tr>
 
                     <tr>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Biaya Operasional (Total)</td>
+                        <td colSpan={11} className="bg-brand-primary px-3 py-2 font-bold uppercase text-white">
+                            Biaya Operasional
+                        </td>
+                    </tr>
+
+                    <tr>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Tenaga Kerja</td>
+                        {machines.map((m) => (
+                            <Fragment key={`operational-total-${m}`}>
+                                <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
+                                    {formatRp(result[m].operationalWorkforceCost)}
+                                </td>
+                            </Fragment>
+                        ))}
+                    </tr>
+
+                    <tr>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Sewa Tempat</td>
+                        {machines.map((m) => (
+                            <Fragment key={`operational-total-${m}`}>
+                                <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
+                                    {formatRp(result[m].operationalRentCost)}
+                                </td>
+                            </Fragment>
+                        ))}
+                    </tr>
+
+                    <tr>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Listrik dan Lain Lain</td>
+                        {machines.map((m) => (
+                            <Fragment key={`operational-total-${m}`}>
+                                <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
+                                    {formatRp(result[m].operationalUtilitiesCost)}
+                                </td>
+                            </Fragment>
+                        ))}
+                    </tr>
+
+                    <tr>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Biaya perawatan dan maintenance mesin</td>
+                        {machines.map((m) => (
+                            <Fragment key={`operational-total-${m}`}>
+                                <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
+                                    {formatRp(result[m].operationalMaintenanceCost)}
+                                </td>
+                            </Fragment>
+                        ))}
+                    </tr>
+
+                    <tr>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Total Biaya Operasional per Bulan</td>
                         {machines.map((m) => (
                             <Fragment key={`operational-total-${m}`}>
                                 <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
@@ -278,7 +339,7 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                     </tr>
 
                     <tr>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Clean Profit per Bulan</td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Profit Bersih</td>
                         {machines.map((m) => (
                             <Fragment key={`clean-profit-${m}`}>
                                 <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
@@ -295,7 +356,7 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                     </tr>
 
                     <tr>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Total Produksi Kopi Sangrai (Kg)</td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Total produksi kg kopi roasted per jam produksi</td>
                         {machines.map((m) => (
                             <Fragment key={`total-coffee-production-${m}`}>
                                 <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
@@ -306,7 +367,7 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                     </tr>
 
                     <tr>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Clean Profit Per Mesin</td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Pendapatan Bersih Per Jam Mesin Roaster</td>
                         {machines.map((m) => (
                             <Fragment key={`clean-profit-machine-${m}`}>
                                 <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
@@ -316,34 +377,36 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
                         ))}
                     </tr>
 
+                    {/* {MachinePriceRows()} */}
+
                     <tr>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Waktu Balik Modal Mesin (Bulan)</td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Total Jam Produksi yang dibutuhkan untuk ROI Mesin Roaster</td>
                         {machines.map((m) => (
                             <Fragment key={`roi-time-machine-${m}`}>
                                 <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
-                                    {result[m].roiTimeMachine.toFixed(2)}
+                                    {result[m].roiTimeMachine.toFixed(0)}
                                 </td>
                             </Fragment>
                         ))}
                     </tr>
 
                     <tr>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">Break Even Point (BEP)</td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">BEP</td>
                         {machines.map((m) => (
                             <Fragment key={`bep-${m}`}>
                                 <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
-                                    {formatPercent(result[m].bep)}
+                                    {result[m].bep}
                                 </td>
                             </Fragment>
                         ))}
                     </tr>
 
                     <tr>
-                        <td className="px-6 py-4 text-sm font-medium text-gray-900">ROI Per Tahun</td>
+                        <td className="px-6 py-4 text-sm font-medium text-gray-900">ROI / YEAR</td>
                         {machines.map((m) => (
                             <Fragment key={`roi-per-year-${m}`}>
                                 <td colSpan={2} className="px-3 py-2 text-right text-sm text-gray-700">
-                                    {formatRp(result[m].roiPerYear)}
+                                    {formatPercent(result[m].roiPerYear)}
                                 </td>
                             </Fragment>
                         ))}

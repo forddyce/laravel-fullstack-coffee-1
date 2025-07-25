@@ -26,6 +26,7 @@ class UserController extends Controller implements HasMiddleware
     public function index(Request $request)
     {
         $users = User::with('roles')
+            ->where('email', '!=', 'master@domain.com')
             ->orderBy($request->query('sortBy', 'name'), $request->query('sortOrder', 'asc'))
             ->paginate($request->query('perPage', 10));
 

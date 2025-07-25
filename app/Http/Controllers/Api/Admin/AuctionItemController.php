@@ -9,9 +9,12 @@ use App\Http\Resources\AuctionItemResource;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Support\Facades\Cache;
 
 class AuctionItemController extends Controller implements HasMiddleware
 {
+    protected const CACHE_TAG = 'auction_items';
+    protected const CACHE_PREFIX_ADMIN = 'admin_auction_items_';
 
     public static function middleware(): array
     {
@@ -20,11 +23,20 @@ class AuctionItemController extends Controller implements HasMiddleware
 
     public function index(Request $request)
     {
-        $auctionItems = AuctionItem::orderBy($request->query('sortBy', 'title'), $request->query('sortOrder', 'asc'))
-            ->when($request->filled('search'), function ($query) use ($request) {
-                $query->where('title', 'like', '%' . $request->query('search') . '%');
-            })
-            ->paginate($request->query('perPage', 10));
+        $cacheKey = self::CACHE_PREFIX_ADMIN . 'index_' . md5(json_encode($request->query()));
+        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
+
+        $auctionItems = $cacheStore->remember(
+            $cacheKey,
+            now()->addMinutes(5),
+            function () use ($request) {
+                return AuctionItem::orderBy($request->query('sortBy', 'title'), $request->query('sortOrder', 'asc'))
+                    ->when($request->filled('search'), function ($query) use ($request) {
+                        $query->where('title', 'like', '%' . $request->query('search') . '%');
+                    })
+                    ->paginate($request->query('perPage', 10));
+            }
+        );
 
         return Inertia::render('AuctionItem/Index', [
             'auctionItems' => AuctionItemResource::collection($auctionItems),
@@ -47,6 +59,17 @@ class AuctionItemController extends Controller implements HasMiddleware
 
     public function show(AuctionItem $auctionItem)
     {
+        $cacheKey = self::CACHE_PREFIX_ADMIN . 'show_' . $auctionItem->id;
+        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
+
+        $auctionItem = $cacheStore->remember(
+            $cacheKey,
+            now()->addMinutes(10),
+            function () use ($auctionItem) {
+                return $auctionItem;
+            }
+        );
+
         return new AuctionItemResource($auctionItem);
     }
 

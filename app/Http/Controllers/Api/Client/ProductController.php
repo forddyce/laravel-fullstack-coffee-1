@@ -9,9 +9,13 @@ use App\Http\Resources\ProductResource;
 use App\Http\Resources\ProductCategoryResource;
 use Illuminate\Http\Request;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\Cache;
 
 class ProductController extends Controller
 {
+    protected const CACHE_TAG = 'client_products';
+    protected const CACHE_PREFIX_CLIENT = 'client_products_';
+
     /**
      * List active products with pagination and optional search by title.
      * GET /api/client/products
@@ -22,17 +26,25 @@ class ProductController extends Controller
      */
     public function index(Request $request)
     {
-        $perPage = $request->query('perPage', 9);
-        $search = $request->query('search');
-        $sortBy = $request->query('sortBy', 'favorite');
-        $sortOrder = $request->query('sortOrder', 'desc');
+        $cacheKey = self::CACHE_PREFIX_CLIENT . 'index_' . md5(json_encode($request->query()));
+        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
+        $products = $cacheStore->remember(
+            $cacheKey,
+            now()->addMinutes(10),
+            function () use ($request) {
+                $perPage = $request->query('perPage', 10);
+                $search = $request->query('search');
+                $sortBy = $request->query('sortBy', 'favorite');
+                $sortOrder = $request->query('sortOrder', 'desc');
 
-        $products = Product::where('is_active', true)
-            ->when($search, function (Builder $query, $search) {
-                $query->where('title', 'like', '%' . $search . '%');
-            })
-            ->orderBy($sortBy, $sortOrder)
-            ->paginate($perPage);
+                return Product::where('is_active', true)
+                    ->when($search, function (Builder $query, $search) {
+                        $query->where('title', 'like', '%' . $search . '%');
+                    })
+                    ->orderBy($sortBy, $sortOrder)
+                    ->paginate($perPage);
+            }
+        );
 
         return $products;
     }
@@ -47,32 +59,47 @@ class ProductController extends Controller
      */
     public function show(string $slug)
     {
-        $product = Product::with('categories')
-            ->where('slug', $slug)
-            ->where('is_active', true)
-            ->first();
+        $cacheKey = self::CACHE_PREFIX_CLIENT . 'show_' . $slug;
+        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
+        $responseContent = $cacheStore->remember(
+            $cacheKey,
+            now()->addMinutes(60),
+            function () use ($slug) {
+                $product = Product::with('categories')
+                    ->where('slug', $slug)
+                    ->where('is_active', true)
+                    ->first();
 
-        if (!$product) {
+                if (!$product) {
+                    return null;
+                }
+
+                $relatedProducts = collect();
+                if ($product->categories->isNotEmpty()) {
+                    $relatedProducts = Product::where('is_active', true)
+                        ->where('id', '!=', $product->id)
+                        ->whereHas('categories', function (Builder $query) use ($product) {
+                            $query->whereIn('product_categories.id', $product->categories->pluck('id'));
+                        })
+                        ->orderBy('favorite', 'desc')
+                        ->orderBy('created_at', 'desc')
+                        ->take(3)
+                        ->get();
+                }
+
+                return [
+                    'product' => new ProductResource($product),
+                    'related_products' => ProductResource::collection($relatedProducts),
+                ];
+            }
+        );
+
+        if ($responseContent === null) {
             return response()->json(['message' => 'Product not found or not active.'], 404);
         }
 
-        $relatedProducts = collect();
-        if ($product->categories->isNotEmpty()) {
-            $relatedProducts = Product::where('is_active', true)
-                ->where('id', '!=', $product->id)
-                ->whereHas('categories', function (Builder $query) use ($product) {
-                    $query->whereIn('product_categories.id', $product->categories->pluck('id'));
-                })
-                ->orderBy('favorite', 'desc')
-                ->orderBy('created_at', 'desc')
-                ->take(3)
-                ->get();
-        }
-
-        return response()->json([
-            'product' => new ProductResource($product),
-            'related_products' => ProductResource::collection($relatedProducts),
-        ]);
+        // The cached content will contain resource instances, which Laravel will re-serialize
+        return response()->json($responseContent);
     }
 
     /**
@@ -90,10 +117,20 @@ class ProductController extends Controller
             return ProductResource::collection(collect());
         }
 
-        $products = Product::where('is_active', true)
-            ->whereIn('id', $ids)
-            ->orderByRaw('FIELD(id, ' . implode(',', $ids) . ')')
-            ->get();
+        sort($ids);
+        $cacheKey = self::CACHE_PREFIX_CLIENT . 'by_ids_' . implode('_', $ids);
+        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
+
+        $products = $cacheStore->remember(
+            $cacheKey,
+            now()->addMinutes(60),
+            function () use ($ids) {
+                return Product::where('is_active', true)
+                    ->whereIn('id', $ids)
+                    ->orderByRaw('FIELD(id, ' . implode(',', $ids) . ')')
+                    ->get();
+            }
+        );
 
         return ProductResource::collection($products);
     }
@@ -108,30 +145,44 @@ class ProductController extends Controller
      */
     public function productsByCategory(Request $request, string $categorySlug)
     {
-        $category = ProductCategory::where('slug', $categorySlug)
-            ->where('is_active', true)
-            ->first();
+        $cacheKey = self::CACHE_PREFIX_CLIENT . 'category_products_' . $categorySlug . '_' . md5(json_encode($request->query()));
+        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
+        $responseContent = $cacheStore->remember(
+            $cacheKey,
+            now()->addMinutes(10),
+            function () use ($request, $categorySlug) {
+                $category = ProductCategory::where('slug', $categorySlug)
+                    ->where('is_active', true)
+                    ->first();
 
-        if (!$category) {
+                if (!$category) {
+                    return null;
+                }
+
+                $perPage = $request->query('perPage', 10);
+                $search = $request->query('search');
+
+                $products = $category->products()
+                    ->where('is_active', true)
+                    ->when($search, function (Builder $query, $search) {
+                        $query->where('title', 'like', '%' . $search . '%');
+                    })
+                    ->orderBy('favorite', 'desc')
+                    ->orderBy('created_at', 'desc')
+                    ->paginate($perPage);
+
+                return [
+                    'category' => new ProductCategoryResource($category),
+                    'products' => ProductResource::collection($products)->response()->getData(true)
+                ];
+            }
+        );
+
+        if ($responseContent === null) {
             return response()->json(['message' => 'Product category not found or not active.'], 404);
         }
 
-        $perPage = $request->query('perPage', 10);
-        $search = $request->query('search');
-
-        $products = $category->products()
-            ->where('is_active', true)
-            ->when($search, function (Builder $query, $search) {
-                $query->where('title', 'like', '%' . $search . '%');
-            })
-            ->orderBy('favorite', 'desc')
-            ->orderBy('created_at', 'desc')
-            ->paginate($perPage);
-
-        return response()->json([
-            'category' => new ProductCategoryResource($category),
-            'products' => ProductResource::collection($products)->response()->getData(true)
-        ]);
+        return response()->json($responseContent);
     }
 
     /**
@@ -141,10 +192,17 @@ class ProductController extends Controller
      */
     public function listAllActiveCategories()
     {
-        $categories = ProductCategory::where('is_active', true)
-            ->orderBy('title', 'asc')
-            ->get();
-
+        $cacheKey = self::CACHE_PREFIX_CLIENT . 'all_categories';
+        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
+        $categories = $cacheStore->remember(
+            $cacheKey,
+            now()->addMinutes(60),
+            function () {
+                return ProductCategory::where('is_active', true)
+                    ->orderBy('title', 'asc')
+                    ->get();
+            }
+        );
         return ProductCategoryResource::collection($categories);
     }
 }

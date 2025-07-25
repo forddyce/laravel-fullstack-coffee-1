@@ -33,7 +33,7 @@ export default function AuctionItemIndexPage() {
             <div className="py-8">
                 <div className="mx-auto max-w-6xl rounded-lg bg-white p-6 px-4 sm:px-6 lg:px-8">
                     <h1 className="title-underline mb-6 text-center text-4xl font-bold text-gray-900">Data Peserta Lelang WE Kopi Kolaborasi 2024</h1>
-                    <div className="prose static-content max-w-none leading-relaxed text-gray-700">
+                    <div className="static-content max-w-none leading-relaxed text-gray-700">
                         <div className="mb-8 text-center">
                             <Link
                                 href="https://wa.me/message/QM5RKRUGDPMZD1"
@@ -53,27 +53,27 @@ export default function AuctionItemIndexPage() {
                         ) : (
                             <div className="overflow-x-auto border border-gray-200 shadow-md">
                                 <table className="min-w-full divide-y divide-gray-200">
-                                    <thead className="bg-gray-100">
+                                    <thead className="bg-brand-primary">
                                         <tr>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">
                                                 KODE KEMASAN
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">
                                                 JENIS
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">
                                                 ORIGIN
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">
                                                 PROSES PASCA PANEN
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">
                                                 PETANI/PROSESOR
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">
                                                 SKOR
                                             </th>
-                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-gray-700">
+                                            <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">
                                                 HARGA AWAL LELANG (PER KG)
                                             </th>
                                         </tr>

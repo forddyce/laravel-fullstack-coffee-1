@@ -25,7 +25,13 @@ export default function SubscribeFormSection() {
                         />
                     </div>
                     <div>
-                        <Button type="submit" disabled={processing || !email} variant="danger" className="bg-brand-primary w-full sm:w-auto">
+                        <Button
+                            type="submit"
+                            disabled={processing || !email}
+                            variant="danger"
+                            className="bg-brand-primary w-full sm:w-auto"
+                            style={{ height: '59px' }}
+                        >
                             {processing ? 'Subscribing...' : 'Subscribe'}
                         </Button>
                     </div>

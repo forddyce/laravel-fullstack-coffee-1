@@ -66,9 +66,9 @@ const RoastCalculatorForm = ({ filter, setFilter }: RoastCalculatorFormProps) =>
                                     type="number"
                                     min={0}
                                     max={100}
-                                    value={filter.retailSalesPercent}
+                                    value={String(filter.retailSalesPercent)}
                                     onChange={(e) => {
-                                        let value = parseInt(e.target.value);
+                                        let value = parseInt(e.target.value, 10);
                                         if (isNaN(value)) value = 0;
                                         if (value < 0) value = 0;
                                         if (value > 100) value = 100;
@@ -78,6 +78,7 @@ const RoastCalculatorForm = ({ filter, setFilter }: RoastCalculatorFormProps) =>
                                             wholesaleSalesPercent: 100 - value,
                                         }));
                                     }}
+                                    className="form-input flex-grow rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
                                 <span className="text-gray-700">%</span>
                             </div>
@@ -153,15 +154,15 @@ const RoastCalculatorForm = ({ filter, setFilter }: RoastCalculatorFormProps) =>
                                     type="number"
                                     min={0}
                                     max={100}
-                                    className="form-input focus:border-brand-primary/50 focus:ring-brand-primary/50 flex-grow rounded-md border-gray-300 shadow-sm"
-                                    value={filter.roastShrinkagePercent}
+                                    value={String(filter.roastShrinkagePercent)}
                                     onChange={(e) => {
-                                        let value = parseInt(e.target.value);
+                                        let value = parseInt(e.target.value, 10);
                                         if (isNaN(value)) value = 0;
                                         if (value < 0) value = 0;
                                         if (value > 100) value = 100;
                                         setFilter((prev) => ({ ...prev, roastShrinkagePercent: value }));
                                     }}
+                                    className="form-input flex-grow rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                                 />
                                 <span className="text-gray-700">%</span>
                             </div>

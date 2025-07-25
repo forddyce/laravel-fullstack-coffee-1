@@ -144,6 +144,10 @@ export interface MachineResult {
     salesPerMonthWholesaleRevenue: number;
     cogsRetail: number;
     cogsWholesale: number;
+    operationalWorkforceCost: number;
+    operationalRentCost: number;
+    operationalUtilitiesCost: number;
+    operationalMaintenanceCost: number;
     operationalTotal: number;
     cleanProfit: number;
     totalCoffeeProduction: number;

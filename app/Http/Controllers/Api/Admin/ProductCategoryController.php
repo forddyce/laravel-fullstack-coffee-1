@@ -10,9 +10,13 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Support\Facades\Cache;
 
 class ProductCategoryController extends Controller implements HasMiddleware
 {
+    protected const CACHE_TAG = 'product_categories';
+    protected const CACHE_PREFIX_ADMIN = 'admin_product_categories_';
+
     public static function middleware(): array
     {
         return [
@@ -22,11 +26,20 @@ class ProductCategoryController extends Controller implements HasMiddleware
 
     public function index(Request $request)
     {
-        $productCategories = ProductCategory::orderBy($request->query('sortBy', 'title'), $request->query('sortOrder', 'asc'))
-            ->when($request->filled('search'), function ($query) use ($request) {
-                $query->where('title', 'like', '%' . $request->query('search') . '%');
-            })
-            ->paginate($request->query('perPage', 10));
+        $cacheKey = self::CACHE_PREFIX_ADMIN . 'index_' . md5(json_encode($request->query()));
+        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
+
+        $productCategories = $cacheStore->remember(
+            $cacheKey,
+            now()->addMinutes(5),
+            function () use ($request) {
+                return ProductCategory::orderBy($request->query('sortBy', 'title'), $request->query('sortOrder', 'asc'))
+                    ->when($request->filled('search'), function ($query) use ($request) {
+                        $query->where('title', 'like', '%' . $request->query('search') . '%');
+                    })
+                    ->paginate($request->query('perPage', 10));
+            }
+        );
 
         return Inertia::render('ProductCategory/Index', [
             'productCategories' => ProductCategoryResource::collection($productCategories),
@@ -48,6 +61,17 @@ class ProductCategoryController extends Controller implements HasMiddleware
 
     public function show(ProductCategory $productCategory)
     {
+        $cacheKey = self::CACHE_PREFIX_ADMIN . 'show_' . $productCategory->id;
+        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
+
+        $productCategory = $cacheStore->remember(
+            $cacheKey,
+            now()->addMinutes(10),
+            function () use ($productCategory) {
+                return $productCategory;
+            }
+        );
+
         return new ProductCategoryResource($productCategory);
     }
 

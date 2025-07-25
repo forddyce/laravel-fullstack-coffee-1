@@ -12,10 +12,13 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Cache;
 
 class BlogController extends Controller implements HasMiddleware
 {
+    protected const CACHE_TAG = 'blogs';
+    protected const CACHE_PREFIX_ADMIN = 'admin_blogs_';
+
     public static function middleware(): array
     {
         return [
@@ -25,12 +28,20 @@ class BlogController extends Controller implements HasMiddleware
 
     public function index(Request $request)
     {
-        $blogs = Blog::with('tags')
-            ->orderBy($request->query('sortBy', 'published_date'), $request->query('sortOrder', 'desc'))
-            ->when($request->filled('search'), function ($query) use ($request) {
-                $query->where('title', 'like', '%' . $request->query('search') . '%');
-            })
-            ->paginate($request->query('perPage', 10));
+        $cacheKey = self::CACHE_PREFIX_ADMIN . 'index_' . md5(json_encode($request->query()));
+        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
+        $blogs = $cacheStore->remember(
+            $cacheKey,
+            now()->addMinutes(5),
+            function () use ($request) {
+                return Blog::with('tags')
+                    ->orderBy($request->query('sortBy', 'published_date'), $request->query('sortOrder', 'desc'))
+                    ->when($request->filled('search'), function ($query) use ($request) {
+                        $query->where('title', 'like', '%' . $request->query('search') . '%');
+                    })
+                    ->paginate($request->query('perPage', 10));
+            }
+        );
 
         return Inertia::render('Blog/Index', [
             'blogs' => BlogResource::collection($blogs),
@@ -40,7 +51,17 @@ class BlogController extends Controller implements HasMiddleware
 
     public function create()
     {
-        $blogTags = BlogTag::where('is_active', true)->select('id', 'title')->get();
+        $cacheKey = self::CACHE_PREFIX_ADMIN . 'available_tags';
+        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
+
+        $blogTags = $cacheStore->remember(
+            $cacheKey,
+            now()->addMinutes(60),
+            function () {
+                return BlogTag::where('is_active', true)->select('id', 'title')->get();
+            }
+        );
+
         return Inertia::render('Blog/Create', [
             'availableTags' => BlogTagResource::collection($blogTags),
         ]);
@@ -58,19 +79,35 @@ class BlogController extends Controller implements HasMiddleware
 
     public function show(Blog $blog)
     {
-        $blog->load('tags');
+        $cacheKey = self::CACHE_PREFIX_ADMIN . 'show_' . $blog->slug;
+        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
+
+        $blog = $cacheStore->remember(
+            $cacheKey,
+            now()->addMinutes(10),
+            function () use ($blog) {
+                return $blog->load('tags');
+            }
+        );
+
         return new BlogResource($blog);
     }
 
     public function edit(Blog $blog)
     {
-        Log::info($blog);
-        $blog->load('tags');
-        $availableTags = BlogTag::where('is_active', true)->select('id', 'title')->get();
+        $cacheKey = self::CACHE_PREFIX_ADMIN . 'available_tags';
+        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
+        $blogTags = $cacheStore->remember(
+            $cacheKey,
+            now()->addMinutes(60),
+            function () {
+                return BlogTag::where('is_active', true)->select('id', 'title')->get();
+            }
+        );
 
         return Inertia::render('Blog/Edit', [
-            'blog' => new BlogResource($blog),
-            'availableTags' => BlogTagResource::collection($availableTags),
+            'blog' => new BlogResource($blog->load('tags')),
+            'availableTags' => BlogTagResource::collection($blogTags),
         ]);
     }
 

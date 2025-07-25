@@ -4,6 +4,7 @@
 
 @theme {
     --color-brand-primary: #a71f1f;
+    --color-brand-primary-rgb: 167, 31, 31;
     --screen-75: 75vh;
     --screen-50: 50vh;
 }
@@ -34,4 +35,56 @@ body {
     margin-top: 0.9rem;
     margin-left: auto;
     margin-right: auto;
+}
+
+.range-theme-thumb::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border-radius: 9999px;
+    background-color: var(--color-brand-primary);
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    margin-top: -0.25rem;
+    box-shadow: 0 0 0 px rgba(var(--color-brand-primary-rgb), 0.2);
+    transition:
+        background-color 0.2s ease-in-out,
+        box-shadow 0.2s ease-in-out;
+}
+
+.range-theme-thumb::-moz-range-thumb {
+    border-radius: 9999px;
+    background-color: var(--color-brand-primary);
+    width: 1rem;
+    height: 1rem;
+    cursor: pointer;
+    box-shadow: 0 0 0 1px rgba(var(--color-brand-primary-rgb), 0.2);
+    transition:
+        background-color 0.2s ease-in-out,
+        box-shadow 0.2s ease-in-out;
+}
+
+.range-theme-thumb:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 1px rgba(var(--color-brand-primary-rgb), 0.3);
+}
+
+.range-theme-thumb:focus::-moz-range-thumb {
+    box-shadow: 0 0 0 1px rgba(var(--color-brand-primary-rgb), 0.3);
+}
+
+.range-theme-thumb::-webkit-slider-runnable-track {
+    width: 100%;
+    height: 0.25rem;
+    background: #d1d5db;
+    border-radius: 9999px;
+}
+
+.range-theme-thumb::-moz-range-track {
+    width: 100%;
+    height: 0.25rem;
+    background: #d1d5db;
+    border-radius: 9999px;
+}
+
+.form-input {
+    padding: 8px 10px;
 }

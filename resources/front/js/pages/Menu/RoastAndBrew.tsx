@@ -43,7 +43,7 @@ export default function RoastAndBrewPage() {
             <div className="py-8">
                 <div className="mx-auto max-w-4xl rounded-lg bg-white p-6 px-4 sm:px-6 lg:px-8">
                     <h1 className="title-underline mb-6 text-center text-4xl font-bold text-gray-900">Roast & Brew</h1>
-                    <div className="prose static-content max-w-none leading-relaxed text-gray-700">
+                    <div className="static-content prose max-w-none leading-relaxed text-gray-700">
                         <h2 className="my-6 text-center text-3xl font-bold text-gray-900">Silahkan datang ke salah satu Roast & Brew Point kami!</h2>
                         <ul className="m-0 list-none p-0">
                             {agents.map((agent) => (
@@ -89,7 +89,7 @@ export default function RoastAndBrewPage() {
                                     <a
                                         href="https://drive.google.com/file/d/14BcK6tNarY0lTPwhSk2RYUWWCPvGgFyk/view?usp=sharing"
                                         target="_blank"
-                                        className={`bg-brand-primary inline-block rounded-md px-8 py-3 text-lg font-medium uppercase text-white shadow-lg transition duration-300 ease-in-out hover:bg-red-700`}
+                                        className={`not-prose bg-brand-primary inline-block rounded-md px-8 py-3 text-lg font-medium uppercase text-white shadow-lg transition duration-300 ease-in-out hover:bg-red-700`}
                                     >
                                         Google Drive
                                     </a>
@@ -107,7 +107,7 @@ export default function RoastAndBrewPage() {
                                     <a
                                         href="https://taplink.cc/roastandbrew"
                                         target="_blank"
-                                        className={`bg-brand-primary inline-block rounded-md px-8 py-3 text-lg font-medium uppercase text-white shadow-lg transition duration-300 ease-in-out hover:bg-red-700`}
+                                        className={`not-prose bg-brand-primary inline-block rounded-md px-8 py-3 text-lg font-medium uppercase text-white shadow-lg transition duration-300 ease-in-out hover:bg-red-700`}
                                     >
                                         WhatsApp
                                     </a>

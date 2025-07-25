@@ -140,7 +140,6 @@ export default function ProductCategoryShow() {
                                                 'No description available.'}
                                         </p>
                                         <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4">
-                                            <span className="text-brand-primary text-lg font-bold">${parseFloat(product.price).toFixed(2)}</span>
                                             <a
                                                 href={`https://wa.me/YOUR_WHATSAPP_NUMBER?text=Saya%20tertarik%20dengan%20produk%20${product.title}.`}
                                                 target="_blank"
