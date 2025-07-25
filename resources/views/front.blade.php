@@ -37,6 +37,14 @@
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-HVKXZ6B3VD"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-HVKXZ6B3VD');
+    </script>
+
     @routes
     @viteReactRefresh
     @vite(['resources/front/js/app.tsx', "resources/front/js/pages/{$page['component']}.tsx"])

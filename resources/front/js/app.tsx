@@ -1,6 +1,6 @@
 import '../css/app.css';
 
-import { createInertiaApp } from '@inertiajs/react';
+import { createInertiaApp, router } from '@inertiajs/react';
 import { resolvePageComponent } from 'laravel-vite-plugin/inertia-helpers';
 import { SnackbarProvider } from 'notistack';
 import { createRoot } from 'react-dom/client';
@@ -22,6 +22,17 @@ createInertiaApp({
     progress: {
         color: '#4B5563',
     },
+});
+
+router.on('finish', () => {
+    if (typeof window.gtag === 'function') {
+        window.gtag('event', 'page_view', {
+            page_title: document.title,
+            page_location: window.location.href,
+            page_path: window.location.pathname + window.location.search,
+            send_to: 'G-HVKXZ6B3VD',
+        });
+    }
 });
 
 // This will set light / dark mode on load...
