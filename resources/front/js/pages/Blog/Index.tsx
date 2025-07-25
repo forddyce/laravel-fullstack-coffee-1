@@ -98,12 +98,12 @@ export default function BlogIndex() {
                                 <div key={blog.id} className="flex flex-col items-center overflow-hidden rounded-lg bg-white text-center shadow-md">
                                     <Link href={route('client.blogs.show', blog.slug)} className="group relative block aspect-video w-full">
                                         <img
-                                            src={blog.featured_image || 'https://via.placeholder.com/600x400?text=No+Image'}
+                                            src={blog.featured_image || 'https://placehold.co/600x400?text=Image+Not+Found'}
                                             alt={blog.title}
                                             className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                                             onError={(e) => {
                                                 e.currentTarget.onerror = null;
-                                                e.currentTarget.src = 'https://via.placeholder.com/600x400?text=Image+Error';
+                                                e.currentTarget.src = 'https://placehold.co/600x400?text=Image+Not+Found';
                                             }}
                                         />
                                     </Link>

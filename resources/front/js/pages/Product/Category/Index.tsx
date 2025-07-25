@@ -121,7 +121,7 @@ export default function ProductCategoryShow() {
                                             className="absolute inset-0 h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
                                             onError={(e) => {
                                                 e.currentTarget.onerror = null;
-                                                e.currentTarget.src = 'https://via.placeholder.com/400x400?text=Image+Error';
+                                                e.currentTarget.src = 'https://placehold.co/600x400?text=Image+Not+Found';
                                             }}
                                         />
                                     </Link>

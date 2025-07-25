@@ -99,12 +99,12 @@ export default function BlogShow() {
                                 <div key={relatedBlog.id} className="flex flex-col overflow-hidden rounded-lg bg-white shadow-md">
                                     <div className="relative aspect-video overflow-hidden">
                                         <img
-                                            src={relatedBlog.featured_image || 'https://via.placeholder.com/600x400?text=No+Image'}
+                                            src={relatedBlog.featured_image || 'https://placehold.co/600x400?text=Image+Not+Found'}
                                             alt={relatedBlog.title}
                                             className="absolute inset-0 h-full w-full object-cover"
                                             onError={(e) => {
                                                 e.currentTarget.onerror = null;
-                                                e.currentTarget.src = 'https://via.placeholder.com/600x400?text=Image+Error';
+                                                e.currentTarget.src = 'https://placehold.co/600x400?text=Image+Not+Found';
                                             }}
                                         />
                                     </div>
