@@ -1,7 +1,8 @@
+import ClientFooter from '@/front/js/components/Footer';
+import ClientHeader from '@/front/js/components/Header';
+import MobileWhatsappButton from '@/front/js/components/MobileWhatsappButton';
+import SubscribeFormSection from '@/front/js/components/SubscribeForm';
 import { ReactNode } from 'react';
-import ClientFooter from '../components/Footer';
-import ClientHeader from '../components/Header';
-import SubscribeFormSection from '../components/SubscribeForm';
 
 interface ClientLayoutProps {
     children: ReactNode;
@@ -14,6 +15,7 @@ export default function ClientLayout({ children }: ClientLayoutProps) {
             <main>{children}</main>
             <SubscribeFormSection />
             <ClientFooter />
+            <MobileWhatsappButton />
         </div>
     );
 }

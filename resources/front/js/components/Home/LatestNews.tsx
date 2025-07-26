@@ -50,12 +50,12 @@ export default function LatestNewsSection() {
                             <div className="relative aspect-video overflow-hidden">
                                 <Link href={route('client.blogs.show', blog.slug)}>
                                     <img
-                                        src={blog.featured_image || 'https://via.placeholder.com/600x400?text=No+Image'}
+                                        src={blog.featured_image || 'https://placehold.co/600x400?text=Image+Not+Found'}
                                         alt={blog.title}
                                         className="absolute inset-0 h-full w-full object-cover"
                                         onError={(e) => {
                                             e.currentTarget.onerror = null;
-                                            e.currentTarget.src = 'https://via.placeholder.com/600x400?text=Image+Load+Error';
+                                            e.currentTarget.src = 'https://placehold.co/600x400?text=Image+Not+Found';
                                         }}
                                     />
                                 </Link>

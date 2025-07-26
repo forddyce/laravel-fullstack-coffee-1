@@ -50,7 +50,7 @@ const RoastCalculatorResult = ({ data }: RoastCalculatorResultProps) => {
 
                 const retailKg = (data.retailSalesPercent / 100) * totalProductionPerMonth;
                 const wholesaleKg = (data.wholesaleSalesPercent / 100) * totalProductionPerMonth;
-                const cogsCalculation = data.beanAcquisitionPrice - data.beanAcquisitionPrice * (data.roastShrinkagePercent / 100);
+                const cogsCalculation = data.beanAcquisitionPrice + data.beanAcquisitionPrice * (data.roastShrinkagePercent / 100);
                 const cogsRetail = (cogsCalculation + data.packagingRetailPrice) * retailKg;
                 const cogsWholesale = (cogsCalculation + data.packagingWholesalePrice) * wholesaleKg;
 

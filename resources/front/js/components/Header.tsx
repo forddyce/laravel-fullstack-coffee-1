@@ -11,14 +11,6 @@ interface ClientNavItem {
 
 const clientNavItems: ClientNavItem[] = [
     {
-        label: 'About Us',
-        children: [
-            { label: 'Our Journey', href: 'client.static.about-us' },
-            { label: 'Our Factory', href: 'client.static.our-factory' },
-            { label: 'Our Technician', href: 'client.static.our-technician' },
-        ],
-    },
-    {
         label: 'Menu',
         children: [
             { label: 'Coffee Lab', href: 'client.static.coffee-lab' },
@@ -27,6 +19,12 @@ const clientNavItems: ClientNavItem[] = [
             { label: 'WE Coffee Collaborations', href: 'client.auction-items.index' },
         ],
     },
+    {
+        label: 'Products',
+        href: 'client.products.index',
+    },
+    { label: 'ROI Calculator', href: 'client.static.calculator' },
+    { label: 'Blog', href: 'client.blogs.index' },
     {
         label: 'FAQ',
         children: [
@@ -38,11 +36,13 @@ const clientNavItems: ClientNavItem[] = [
         ],
     },
     {
-        label: 'Products',
-        href: 'client.products.index',
+        label: 'About Us',
+        children: [
+            { label: 'Our Journey', href: 'client.static.about-us' },
+            { label: 'Our Factory', href: 'client.static.our-factory' },
+            { label: 'Our Technician', href: 'client.static.our-technician' },
+        ],
     },
-    { label: 'Blog', href: 'client.blogs.index' },
-    { label: 'ROI Calculator', href: 'client.static.calculator' },
     { label: 'Forum WE', href: 'http://sharemytribe.me/551c4', isStaticLink: true },
 ];
 

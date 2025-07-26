@@ -7,6 +7,7 @@ interface Slide {
     imageSrc: string;
     buttonText: string;
     buttonHref: string;
+    isInertiaRoute?: boolean;
 }
 
 interface HeroSliderProps {
@@ -14,8 +15,14 @@ interface HeroSliderProps {
 }
 
 const slides: Slide[] = [
-    { id: 1, imageSrc: '/images/slides/slide-01.webp', buttonText: 'See Catalog', buttonHref: '/product/roasting-machine-w-11x' },
-    { id: 2, imageSrc: '/images/slides/slide-02.webp', buttonText: 'Learn More', buttonHref: 'client.static.we-coffee-academy' },
+    { id: 1, imageSrc: '/images/slides/slide-01.webp', buttonText: 'See Catalog', buttonHref: '/product/roasting-machine-w-11' },
+    {
+        id: 2,
+        imageSrc: '/images/slides/slide-02.webp',
+        buttonText: 'Learn More',
+        buttonHref: 'client.static.we-coffee-academy',
+        isInertiaRoute: true,
+    },
     { id: 3, imageSrc: '/images/slides/slide-03.webp', buttonText: 'See Catalog', buttonHref: '/product-category/we-selective' },
 ];
 
@@ -53,8 +60,8 @@ export default function HeroSlider({ autoPlayInterval = 5000 }: HeroSliderProps)
             </div>
             <div className="relative z-10 flex h-full flex-col items-center justify-center px-4 text-center text-white">
                 <Link
-                    href={currentSlideData.buttonHref}
-                    className="bg-brand-primary hover:bg-brand-primary/50 px-8 py-3 text-lg uppercase text-white shadow-lg transition duration-300 ease-in-out"
+                    href={currentSlideData.isInertiaRoute ? route(currentSlideData.buttonHref) : currentSlideData.buttonHref}
+                    className="bg-brand-primary hover:bg-brand-primary/50 px-8 py-3 text-lg font-bold uppercase text-white shadow-lg transition duration-300 ease-in-out"
                 >
                     {currentSlideData.buttonText}
                 </Link>

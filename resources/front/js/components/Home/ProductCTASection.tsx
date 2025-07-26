@@ -58,12 +58,12 @@ export default function ProductCTASection() {
                             >
                                 <div className="relative mb-4 aspect-square w-full">
                                     <img
-                                        src={product.primary_image || 'https://via.placeholder.com/200x200?text=No+Image'}
+                                        src={product.primary_image || 'https://placehold.co/200x200?text=Image+Not+Found'}
                                         alt={product.title}
                                         className="absolute inset-0 h-full w-full object-contain"
                                         onError={(e) => {
                                             e.currentTarget.onerror = null;
-                                            e.currentTarget.src = 'https://via.placeholder.com/200x200?text=Image+Error';
+                                            e.currentTarget.src = 'https://placehold.co/200x200?text=Image+Not+Found';
                                         }}
                                     />
                                 </div>
