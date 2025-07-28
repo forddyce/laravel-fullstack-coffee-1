@@ -91,6 +91,10 @@ Route::name('client.')->group(function () {
     Route::get('/contact', function () {
         return Inertia::render('Contact')->rootView('front');
     })->name('static.contact');
+
+    Route::get('/privacy-policy', function () {
+        return Inertia::render('Privacy')->rootView('front');
+    })->name('static.privacy');
 });
 
 Route::post('logout', [LogoutController::class, 'store'])->middleware('auth')->name('logout');

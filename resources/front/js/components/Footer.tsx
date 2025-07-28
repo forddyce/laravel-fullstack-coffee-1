@@ -120,6 +120,14 @@ export default function ClientFooter() {
                                     WE Coffee Academy
                                 </Link>
                             </li>
+                            <li>
+                                <Link
+                                    href={route('client.static.privacy')}
+                                    className="text-sm text-gray-200 transition-colors duration-200 hover:text-white"
+                                >
+                                    Privacy Policy
+                                </Link>
+                            </li>
                         </ul>
                     </div>
                 </div>
