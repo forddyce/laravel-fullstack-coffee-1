@@ -1,6 +1,7 @@
 import ClientLayout from '@/front/js/layouts/ClientLayout';
+import { whatsappLink } from '@/front/js/utils/misc';
 import { Head } from '@inertiajs/react';
-import { BookOpen, Globe, User } from 'lucide-react'; // Example Lucide icons for features
+import { BookOpen, Globe, User } from 'lucide-react';
 
 export default function WeCoffeeAcademy() {
     return (
@@ -20,14 +21,14 @@ export default function WeCoffeeAcademy() {
                     </p>
                     <div className="flex space-x-4">
                         <a
-                            href="https://wa.link/ovrhsn"
+                            href={whatsappLink}
                             target="_blank"
                             className="bg-brand-primary rounded-lg px-8 py-3 text-lg font-semibold uppercase text-white shadow-lg transition duration-300 ease-in-out hover:bg-red-700"
                         >
                             Daftar Sekarang
                         </a>
                         <a
-                            href="https://wa.link/ovrhsn"
+                            href={whatsappLink}
                             target="_blank"
                             className="hover:text-brand-primary rounded-lg border-2 border-white px-8 py-3 text-lg font-semibold uppercase text-white shadow-lg transition duration-300 ease-in-out hover:bg-white"
                         >
@@ -104,9 +105,9 @@ export default function WeCoffeeAcademy() {
                                     <li>Lokasi: WE Coffee Lab</li>
                                 </ul>
                                 <a
-                                    href="https://wa.link/ovrhsn"
+                                    href={whatsappLink}
                                     target="_blank"
-                                    className="bg-brand-primary inline-block rounded-md px-8 py-3 text-base font-semibold uppercase text-white transition duration-300 ease-in-out hover:bg-red-700"
+                                    className="inline-block rounded-md bg-green-500 px-8 py-3 text-base font-semibold uppercase text-white transition duration-300 ease-in-out hover:bg-green-600"
                                 >
                                     Daftar Sekarang Via WhatsApp
                                 </a>

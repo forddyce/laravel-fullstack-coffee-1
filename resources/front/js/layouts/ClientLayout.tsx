@@ -10,7 +10,7 @@ interface ClientLayoutProps {
 
 export default function ClientLayout({ children }: ClientLayoutProps) {
     return (
-        <div className="flex min-h-screen flex-col bg-gray-50 antialiased">
+        <div className="pt-18 flex min-h-screen flex-grow flex-col bg-gray-50 antialiased">
             <ClientHeader />
             <main>{children}</main>
             <SubscribeFormSection />

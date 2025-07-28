@@ -175,7 +175,7 @@ export default function ClientHeader() {
     };
 
     return (
-        <header className="bg-white py-4 shadow-sm">
+        <header className="fixed top-0 z-50 w-full bg-white py-4 shadow-sm">
             <div className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
                 <Link href={route('client.home')} className="flex-shrink-0">
                     <img src="/logo_text.webp" alt="Wiliam Edison" style={{ width: '80px' }} />

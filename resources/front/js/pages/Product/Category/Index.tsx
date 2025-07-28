@@ -2,9 +2,11 @@ import Button from '@/back/js/components/FormElements/Button';
 import TextInput from '@/back/js/components/FormElements/TextInput';
 import Pagination from '@/back/js/components/Pagination';
 import ClientLayout from '@/front/js/layouts/ClientLayout';
+import { whatsappLink } from '@/front/js/utils/misc';
 import type { PageProps } from '@inertiajs/core';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import { useEffect, useRef, useState } from 'react';
+import { FaWhatsapp } from 'react-icons/fa';
 import { Product, ProductCategory } from 'types';
 
 interface ProductCategoryShowProps extends PageProps {
@@ -63,7 +65,7 @@ export default function ProductCategoryShow() {
                 clearTimeout(debounceTimeoutRef.current);
             }
         };
-    }, [search, category.slug]); // Re-run effect when search or category changes
+    }, [search, category.slug]);
 
     return (
         <ClientLayout>
@@ -79,13 +81,8 @@ export default function ProductCategoryShow() {
             <section className="bg-gray-50 py-8">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="mb-8 flex flex-col items-center justify-between gap-4 md:flex-row">
-                        {/* "All" button and current category name */}
                         <div className="flex flex-wrap justify-center gap-2 md:justify-start">
-                            <Button
-                                onClick={() => router.get(route('client.products.index'))} // Link back to all products
-                                variant={'secondary'}
-                                className="text-sm uppercase"
-                            >
+                            <Button onClick={() => router.get(route('client.products.index'))} variant={'secondary'} className="text-sm uppercase">
                                 &larr; All Products
                             </Button>
                             <Button variant={'primary'} className="cursor-default text-sm uppercase">
@@ -141,12 +138,12 @@ export default function ProductCategoryShow() {
                                         </p>
                                         <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4">
                                             <a
-                                                href={`https://wa.me/YOUR_WHATSAPP_NUMBER?text=Saya%20tertarik%20dengan%20produk%20${product.title}.`}
+                                                href={whatsappLink}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="inline-flex items-center rounded-md bg-green-500 px-4 py-2 text-xs font-medium uppercase text-white transition duration-300 ease-in-out hover:bg-green-600"
                                             >
-                                                Chat With Us
+                                                <FaWhatsapp size={18} className="mr-2" /> Chat With Us
                                             </a>
                                         </div>
                                     </div>

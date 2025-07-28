@@ -37,7 +37,7 @@
         "clsx": "^2.1.1",
         "concurrently": "^9.2.0",
         "laravel-vite-plugin": "^2.0",
-        "lucide-react": "^0.525.0",
+        "lucide-react": "^0.526.0",
         "notistack": "^3.0.2",
         "react": "^19.1.0",
         "react-dom": "^19.1.0",
@@ -48,13 +48,13 @@
         "tailwind-merge": "^3.3.1",
         "tailwindcss": "^4.1.11",
         "tailwindcss-animate": "^1.0.7",
-        "tinymce": "7.9.1",
+        "tinymce": "8.0.1",
         "typescript": "^5.8.3",
         "vite": "^7.0",
         "ziggy-js": "^2.5.3"
     },
     "optionalDependencies": {
-        "@rollup/rollup-linux-x64-gnu": "4.45.1",
+        "@rollup/rollup-linux-x64-gnu": "4.46.1",
         "@tailwindcss/oxide-linux-x64-gnu": "^4.1.11",
         "lightningcss-linux-x64-gnu": "^1.30.1"
     }

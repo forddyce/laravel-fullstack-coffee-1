@@ -2,10 +2,12 @@ import Button from '@/back/js/components/FormElements/Button';
 import TextInput from '@/back/js/components/FormElements/TextInput';
 import Pagination from '@/back/js/components/Pagination';
 import ClientLayout from '@/front/js/layouts/ClientLayout';
+import { whatsappLink } from '@/front/js/utils/misc';
 import type { PageProps } from '@inertiajs/core';
 import { Head, Link, router, usePage } from '@inertiajs/react';
 import axios from 'axios';
 import { useEffect, useRef, useState } from 'react';
+import { FaWhatsapp } from 'react-icons/fa';
 import { Product, ProductCategory } from 'types';
 
 interface ProductIndexProps extends PageProps {
@@ -187,12 +189,12 @@ export default function ProductIndex() {
                                         </p>
                                         <div className="mt-auto flex items-center justify-between border-t border-gray-100 pt-4">
                                             <a
-                                                href={`https://wa.link/ovrhsn`}
+                                                href={whatsappLink}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
                                                 className="inline-flex items-center rounded-md bg-green-500 px-4 py-2 text-xs font-medium uppercase text-white transition duration-300 ease-in-out hover:bg-green-600"
                                             >
-                                                Chat With Us
+                                                <FaWhatsapp size={18} className="mr-2" /> Chat With Us
                                             </a>
                                         </div>
                                     </div>

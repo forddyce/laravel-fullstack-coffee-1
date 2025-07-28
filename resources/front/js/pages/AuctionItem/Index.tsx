@@ -2,7 +2,9 @@ import ClientLayout from '@/front/js/layouts/ClientLayout';
 import { Head, Link } from '@inertiajs/react';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
+import { FaWhatsapp } from 'react-icons/fa';
 import type { AuctionItem } from 'types';
+import { whatsappLink } from '../../utils/misc';
 
 export default function AuctionItemIndexPage() {
     const [auctionItems, setAuctionItems] = useState<AuctionItem[]>([]);
@@ -36,11 +38,11 @@ export default function AuctionItemIndexPage() {
                     <div className="static-content max-w-none leading-relaxed text-gray-700">
                         <div className="mb-8 text-center">
                             <Link
-                                href="https://wa.me/message/QM5RKRUGDPMZD1"
+                                href={whatsappLink}
                                 target="_blank"
                                 className="inline-flex items-center rounded-full bg-green-500 px-6 py-3 text-lg font-semibold uppercase text-white shadow-md transition duration-300 ease-in-out hover:bg-green-600"
                             >
-                                WhatsApp
+                                <FaWhatsapp size={18} className="mr-2" /> WhatsApp
                             </Link>
                         </div>
 

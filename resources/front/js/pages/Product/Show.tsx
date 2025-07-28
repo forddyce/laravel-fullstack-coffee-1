@@ -1,10 +1,11 @@
 import ClientLayout from '@/front/js/layouts/ClientLayout';
+import { whatsappLink } from '@/front/js/utils/misc';
 import type { PageProps } from '@inertiajs/core';
 import { Head, Link, usePage } from '@inertiajs/react';
 import { useEffect, useState } from 'react';
+import { FaWhatsapp } from 'react-icons/fa';
 import type { Product } from 'types';
 
-// Define the shape of the props for this page
 interface ProductShowProps extends PageProps {
     product: Product;
     relatedProducts: Product[];
@@ -117,12 +118,12 @@ export default function ProductShow() {
 
                             <div className="mt-auto">
                                 <a
-                                    href={`https://wa.link/ovrhsn`}
+                                    href={whatsappLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="bg-brand-primary inline-flex items-center rounded-md px-6 py-3 text-lg font-semibold uppercase text-white shadow-lg transition duration-300 ease-in-out hover:bg-red-700"
+                                    className="inline-flex items-center rounded-md bg-green-500 px-6 py-3 text-lg font-semibold uppercase text-white shadow-lg transition duration-300 ease-in-out hover:bg-green-600"
                                 >
-                                    Chat With Us
+                                    <FaWhatsapp size={28} className="mr-4" /> Chat With Us
                                 </a>
                             </div>
                         </div>
@@ -173,12 +174,12 @@ export default function ProductShow() {
 
                                     <div className="mt-auto">
                                         <a
-                                            href={`https://wa.link/ovrhsn`}
+                                            href={whatsappLink}
                                             target="_blank"
                                             rel="noopener noreferrer"
                                             className="inline-flex items-center rounded-md bg-green-500 px-4 py-2 text-xs font-medium uppercase text-white transition duration-300 ease-in-out hover:bg-green-600"
                                         >
-                                            Chat With Us
+                                            <FaWhatsapp size={18} className="mr-2" /> Chat With Us
                                         </a>
                                     </div>
                                 </div>
