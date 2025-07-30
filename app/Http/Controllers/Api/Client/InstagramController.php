@@ -38,9 +38,6 @@ class InstagramController extends Controller
                     'access_token' => $accessToken,
                     'limit' => 6,
                 ]);
-
-                $response->throw();
-
                 $media = $response->json('data');
 
                 if (empty($media)) {
@@ -48,7 +45,7 @@ class InstagramController extends Controller
                 }
 
                 return collect($media)->filter(function ($item) {
-                    return in_array($item['media_type'], ['IMAGE', 'CAROUSEL_ALBUM']);
+                    return in_array($item['media_type'], ['IMAGE', 'VIDEO', 'CAROUSEL_ALBUM']);
                 })->take(6)->map(function ($item) {
                     return [
                         'id' => $item['id'],

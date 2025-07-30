@@ -19,7 +19,8 @@ export default function InstagramSection() {
     useEffect(() => {
         const fetchInstagramFeed = async () => {
             try {
-                const response = await axios.get(route('client.instagram.latest'));
+                const response = await axios.get(route('api.client.instagram.latest'));
+                console.log({ response });
                 setImages(response.data.data);
                 setLoading(false);
             } catch (err) {
@@ -45,7 +46,7 @@ export default function InstagramSection() {
     }
 
     return (
-        <section className="bg-white py-16">
+        <section className="bg-white pt-16">
             <div className="relative overflow-hidden">
                 <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
                     {images.map((image) => (
@@ -57,21 +58,20 @@ export default function InstagramSection() {
                             className="group relative block aspect-square overflow-hidden"
                         >
                             <img
-                                src={image.url}
+                                src={image.thumbnail_url}
                                 alt={image.caption || 'Instagram Post'}
-                                className="absolute inset-0 h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                                className="absolute inset-0 h-full w-full object-contain transition-transform duration-300 group-hover:scale-105"
                                 onError={(e) => {
                                     e.currentTarget.onerror = null;
-                                    e.currentTarget.src = 'https://via.placeholder.com/300x300?text=Image+Error';
+                                    e.currentTarget.src = 'https://placehold.co/300x300?text=Image+Error';
                                 }}
                             />
-                            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 transition-opacity group-hover:bg-opacity-20">
+                            <div className="absolute inset-0 flex items-center justify-center">
                                 <InstagramIcon size={32} className="text-white opacity-0 group-hover:opacity-100" />
                             </div>
                         </a>
                     ))}
                 </div>
-                {/* Red bar at the bottom */}
                 <div className="bg-brand-primary absolute bottom-0 left-0 h-4 w-full"></div>
             </div>
         </section>
