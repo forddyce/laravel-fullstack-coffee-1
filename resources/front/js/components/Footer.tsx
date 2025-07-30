@@ -23,6 +23,7 @@ export default function ClientFooter() {
                             <div className="flex items-start">
                                 <MapPin className="mr-3 mt-1 h-5 w-5" />
                                 <p className="text-sm">
+                                    PT WILLINDO JAYA UTAMA <br />
                                     De Mansion Blok E No. 3, Alamsutera, <br />
                                     RT.001/RW.014, Kunciran, Kec. Pinang, Tangerang <br />
                                     Kota, Banten 15143

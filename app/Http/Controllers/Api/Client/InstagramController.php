@@ -31,7 +31,7 @@ class InstagramController extends Controller
         $cacheKey = 'instagram_latest_images';
         $cacheStore = defined('CACHE_TAGS_AVAILABLE') && CACHE_TAGS_AVAILABLE ? Cache::tags('instagram') : Cache::getFacadeRoot();
 
-        $images = $cacheStore->remember($cacheKey, now()->addMinutes(60), function () use ($accessToken, $baseUrl, $userId) { // Cache for 1 hour
+        $images = $cacheStore->remember($cacheKey, now()->addMinutes(60), function () use ($accessToken, $baseUrl, $userId) {
             try {
                 $response = Http::get("{$baseUrl}{$userId}/media", [
                     'fields' => 'id,media_type,media_url,thumbnail_url,permalink,caption,timestamp',

@@ -192,7 +192,7 @@ export default function ProductIndex() {
                                                 href={whatsappLink}
                                                 target="_blank"
                                                 rel="noopener noreferrer"
-                                                className="inline-flex items-center rounded-md bg-green-500 px-4 py-2 text-xs font-medium uppercase text-white transition duration-300 ease-in-out hover:bg-green-600"
+                                                className="bg-brand-primary inline-flex items-center rounded-md px-4 py-2 text-xs font-medium uppercase text-white transition duration-300 ease-in-out hover:bg-red-500"
                                             >
                                                 <FaWhatsapp size={18} className="mr-2" /> Chat With Us
                                             </a>

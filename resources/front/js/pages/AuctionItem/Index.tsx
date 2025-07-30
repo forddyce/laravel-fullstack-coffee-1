@@ -40,7 +40,7 @@ export default function AuctionItemIndexPage() {
                             <Link
                                 href={whatsappLink}
                                 target="_blank"
-                                className="inline-flex items-center rounded-full bg-green-500 px-6 py-3 text-lg font-semibold uppercase text-white shadow-md transition duration-300 ease-in-out hover:bg-green-600"
+                                className="bg-brand-primary inline-flex items-center rounded-full px-6 py-3 text-lg font-semibold uppercase text-white shadow-md transition duration-300 ease-in-out hover:bg-red-500"
                             >
                                 <FaWhatsapp size={18} className="mr-2" /> WhatsApp
                             </Link>

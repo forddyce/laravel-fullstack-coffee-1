@@ -42,7 +42,7 @@ return [
 
     'instagram' => [
         'access_token' => env('INSTAGRAM_ACCESS_TOKEN'),
-        'base_url' => 'https://graph.instagram.com/v19.0/',
+        'base_url' => 'https://graph.instagram.com/v23.0/',
     ],
 
 ];

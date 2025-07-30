@@ -107,7 +107,7 @@ export default function WeCoffeeAcademy() {
                                 <a
                                     href={whatsappLink}
                                     target="_blank"
-                                    className="inline-block rounded-md bg-green-500 px-8 py-3 text-base font-semibold uppercase text-white transition duration-300 ease-in-out hover:bg-green-600"
+                                    className="bg-brand-primary inline-block rounded-md px-8 py-3 text-base font-semibold uppercase text-white transition duration-300 ease-in-out hover:bg-red-500"
                                 >
                                     Daftar Sekarang Via WhatsApp
                                 </a>

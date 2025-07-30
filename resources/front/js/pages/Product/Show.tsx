@@ -121,7 +121,7 @@ export default function ProductShow() {
                                     href={whatsappLink}
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="inline-flex items-center rounded-md bg-green-500 px-6 py-3 text-lg font-semibold uppercase text-white shadow-lg transition duration-300 ease-in-out hover:bg-green-600"
+                                    className="bg-brand-primary inline-flex items-center rounded-md px-6 py-3 text-lg font-semibold uppercase text-white shadow-lg transition duration-300 ease-in-out hover:bg-red-500"
                                 >
                                     <FaWhatsapp size={28} className="mr-4" /> Chat With Us
                                 </a>
@@ -177,7 +177,7 @@ export default function ProductShow() {
                                             href={whatsappLink}
                                             target="_blank"
                                             rel="noopener noreferrer"
-                                            className="inline-flex items-center rounded-md bg-green-500 px-4 py-2 text-xs font-medium uppercase text-white transition duration-300 ease-in-out hover:bg-green-600"
+                                            className="bg-brand-primary inline-flex items-center rounded-md px-4 py-2 text-xs font-medium uppercase text-white transition duration-300 ease-in-out hover:bg-red-500"
                                         >
                                             <FaWhatsapp size={18} className="mr-2" /> Chat With Us
                                         </a>
