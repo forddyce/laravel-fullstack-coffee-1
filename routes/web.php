@@ -84,6 +84,10 @@ Route::name('client.')->group(function () {
         return Inertia::render('FAQ/W30')->rootView('front');
     })->name('static.faq.w30');
 
+    Route::get('/faq/w60', function () {
+        return Inertia::render('FAQ/W60')->rootView('front');
+    })->name('static.faq.w60');
+
     Route::get('/calculator', function () {
         return Inertia::render('RoastCalculator')->rootView('front');
     })->name('static.calculator');

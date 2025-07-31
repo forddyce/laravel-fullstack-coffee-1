@@ -429,3 +429,39 @@ export const w30Items = [
         text: 'Sparepart mesin tersedia dan dijual terpisah.',
     },
 ];
+
+export const w60Items = [
+    {
+        title: 'Berapa total pemakaian listrik di mesin W 6.0?',
+        text: 'Drum Dynamo 370 Watt, Agitator Electricity 40 Watt, Airflow 60 Watt, Cooling Beans 320 Watt',
+    },
+    {
+        title: 'Apakah Mesin W 6.0  bisa disambungkan ke dalam laptop/integrasi kedalam software ARTISAN?',
+        text: 'Bisa. Dengan memakai kabel USB yang sudah terdapat didalam paket pembelian mesin, hanya perlu download dan instal software ARTISAN nya.',
+    },
+    {
+        title: 'Apakah tersedia pilihan warna untuk mesin W 6.0?',
+        text: 'Hanya tersedia 1 warna yaitu warna hitam.',
+    },
+    {
+        title: 'Apakah ada garansi untuk mesinnya?',
+        text: '<p><strong>CAKUPAN GARANSI</strong></p>\
+    <ol class="list list-marked">\
+      <li>Masa garansi produk berlaku 1  Tahun, sejak tanggal produk diterima yang harus dibuktikan dengan tanggal yang tertera pada faktur dan kartu garansi.</li>\
+      <li>Garansi mencakup perbaikan atau pergantian bagian yang rusak akibat kesalahan produksi.</li>\
+      <li>Garansi hanya berlaku jika klaim didukung dengan faktur pembelian dan kartu garansi.</li>\
+    </ol>\
+    <p><strong>GARANSI TIDAK BERLAKU APABILA</strong></p>\
+    <ol class="list list-marked">\
+      <li>Pembelian sudah melewati masa garansi 1 Tahun.</li>\
+      <li>Kelalaian konsumen, termasuk didalamnya adalah penggunaan yang tidak sesuai dengan peruntukannya.</li>\
+      <li>Kerusakan yang timbul akibat service yang dilakukan oleh pihak lain selain pihak Wiliam Edison Coffee Roaster.</li>\
+      <li>Unboxing video tidak disertakan untuk klaim bagian mesin yang tidak ada.</li>\
+    </ol>\
+    ',
+    },
+    {
+        title: 'Bagaimana untuk ketersediaan spare part mesin?',
+        text: 'Sparepart mesin tersedia dan dijual terpisah.',
+    },
+];

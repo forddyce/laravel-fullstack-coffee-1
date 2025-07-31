@@ -33,6 +33,7 @@ const clientNavItems: ClientNavItem[] = [
             { label: 'WExSUJI', href: 'client.static.faq.wexsuji' },
             { label: 'W 1.0 & W 1.1', href: 'client.static.faq.w10-w11' },
             { label: 'W 3.0', href: 'client.static.faq.w30' },
+            { label: 'W 6.0', href: 'client.static.faq.w60' },
         ],
     },
     {
