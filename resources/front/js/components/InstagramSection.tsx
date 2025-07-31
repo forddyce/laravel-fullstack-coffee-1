@@ -72,7 +72,6 @@ export default function InstagramSection() {
                         </a>
                     ))}
                 </div>
-                <div className="bg-brand-primary absolute bottom-0 left-0 h-4 w-full"></div>
             </div>
         </section>
     );

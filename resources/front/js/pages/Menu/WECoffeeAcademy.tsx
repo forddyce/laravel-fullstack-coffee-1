@@ -100,9 +100,9 @@ export default function WeCoffeeAcademy() {
                             <div className="p-6">
                                 <h3 className="mb-3 text-2xl font-bold text-gray-900">ROASTING CLASS BY WILLIAM EDISON</h3>
                                 <ul className="mb-6 list-inside list-disc space-y-1 text-base text-gray-700">
-                                    <li>Level: Pemula–Menengah</li>
-                                    <li>Durasi: 7 Hari Intensif</li>
-                                    <li>Lokasi: WE Coffee Lab</li>
+                                    <li>Level: Pemula - Menengah</li>
+                                    <li>Durasi: Hybrid - 1 hari online, 2 hari offline</li>
+                                    <li>Lokasi: WE COFFEE LAB/20ML Coffee Roastery/Two Tigers Coffee Lab</li>
                                 </ul>
                                 <a
                                     href={whatsappLink}
@@ -123,14 +123,19 @@ export default function WeCoffeeAcademy() {
                                 />
                             </div>
                             <div className="p-6">
-                                <h3 className="mb-3 text-2xl font-bold text-gray-900">COFFEE PROFILING & PRODUCT DEVELOPMENT</h3>
-                                <p className="mb-6 text-base text-gray-700"></p>
-                                <button
-                                    disabled
-                                    className="inline-block cursor-not-allowed rounded-md bg-gray-400 px-8 py-3 text-base font-semibold uppercase text-white"
+                                <h3 className="mb-3 text-2xl font-bold text-gray-900">QP CLASS</h3>
+                                <ul className="mb-6 list-inside list-disc space-y-1 text-base text-gray-700">
+                                    <li>QP Level 1 : 3 hari di WE COFFEE LAB/20ML Coffee Roastery/ Gravfarm Ciwidey bandung</li>
+                                    <li>QP Level 2 : 6 hari di Belantih Coffee Farm Kintamani</li>
+                                    <li>Inoculation : 1 hari di Gravfarm Ciwidey Bandung</li>
+                                </ul>
+                                <a
+                                    href={whatsappLink}
+                                    target="_blank"
+                                    className="bg-brand-primary inline-block rounded-md px-8 py-3 text-base font-semibold uppercase text-white transition duration-300 ease-in-out hover:bg-red-500"
                                 >
-                                    Coming Soon
-                                </button>
+                                    Daftar Sekarang Via WhatsApp
+                                </a>
                             </div>
                         </div>
                     </div>

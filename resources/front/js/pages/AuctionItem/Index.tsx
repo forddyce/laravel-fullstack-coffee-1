@@ -37,13 +37,13 @@ export default function AuctionItemIndexPage() {
                     <h1 className="title-underline mb-6 text-center text-4xl font-bold text-gray-900">Data Peserta Lelang WE Kopi Kolaborasi 2024</h1>
                     <div className="static-content max-w-none leading-relaxed text-gray-700">
                         <div className="mb-8 text-center">
-                            <Link
+                            <a
                                 href={whatsappLink}
                                 target="_blank"
                                 className="bg-brand-primary inline-flex items-center rounded-full px-6 py-3 text-lg font-semibold uppercase text-white shadow-md transition duration-300 ease-in-out hover:bg-red-500"
                             >
                                 <FaWhatsapp size={18} className="mr-2" /> WhatsApp
-                            </Link>
+                            </a>
                         </div>
 
                         {loading ? (

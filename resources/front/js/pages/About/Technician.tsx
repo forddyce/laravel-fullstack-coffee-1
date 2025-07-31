@@ -16,8 +16,8 @@ export default function AboutTechnicianPage() {
                             Coffee Roaster berkomitmen untuk menyediakan layanan pelanggan yang dapat diandalkan.
                         </p>
                         <div className="my-5 flex flex-col gap-4 md:flex-row">
-                            <img src="/images/technician/1.webp" alt="Technician 1" className="flex-1 object-contain" />
-                            <img src="/images/technician/2.webp" alt="Technician 2" className="flex-1 object-contain" />
+                            <img src="/images/technician/3.webp" alt="Technician 1" className="w-full flex-1 object-contain md:w-1/2" />
+                            <img src="/images/technician/4.webp" alt="Technician 2" className="w-full flex-1 object-contain md:w-1/2" />
                         </div>
                         <p>
                             Layanan purna jual kami merupakan kurasi yang menjunjung tinggi kepuasan agar dapat memaksimalkan pengalaman dari setiap
