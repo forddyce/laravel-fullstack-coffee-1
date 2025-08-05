@@ -28,6 +28,7 @@ export default function UserCreate() {
                                     success: undefined,
                                     error: undefined,
                                 }}
+                                ziggy={undefined}
                             />
                         </div>
                     </div>

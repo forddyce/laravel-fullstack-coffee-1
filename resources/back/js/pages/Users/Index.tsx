@@ -24,10 +24,16 @@ interface UserIndexPageProps extends PageProps {
             links: { url: string | null; label: string; active: boolean }[];
         };
     };
+    filters: {
+        search?: string;
+        sortBy?: string;
+        sortOrder?: string;
+        perPage?: number;
+    };
 }
 
 export default function UserIndex() {
-    const { users, flash } = usePage<UserIndexPageProps>().props;
+    const { users, filters, flash } = usePage<UserIndexPageProps>().props;
 
     const { success, error, confirm } = useNotifications();
 
@@ -143,7 +149,7 @@ export default function UserIndex() {
                                 <p className="text-center text-gray-500">No users found.</p>
                             )}
 
-                            {users.meta.links && users.meta.links.length > 3 && <Pagination links={users.meta.links} />}
+                            {users.meta.links && users.meta.links.length > 3 && <Pagination links={users.meta.links} filters={filters} />}
                         </div>
                     </div>
                 </div>

@@ -30,6 +30,7 @@ export default function UserEdit() {
                                     success: undefined,
                                     error: undefined,
                                 }}
+                                ziggy={undefined}
                             />
                         </div>
                     </div>
