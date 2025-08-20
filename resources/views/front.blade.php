@@ -62,7 +62,7 @@
     /></noscript>
     <!-- End Meta Pixel Code -->
 
-    @routes
+    @routes('client')
     @viteReactRefresh
     @vite(['resources/front/js/app.tsx', "resources/front/js/pages/{$page['component']}.tsx"])
     @inertiaHead

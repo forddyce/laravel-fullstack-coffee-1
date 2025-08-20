@@ -20,7 +20,6 @@ export default function InstagramSection() {
         const fetchInstagramFeed = async () => {
             try {
                 const response = await axios.get(route('api.client.instagram.latest'));
-                console.log({ response });
                 setImages(response.data.data);
                 setLoading(false);
             } catch (err) {
