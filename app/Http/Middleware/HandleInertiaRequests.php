@@ -2,8 +2,10 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Season;
 use Illuminate\Foundation\Inspiring;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Inertia\Middleware;
 use Tighten\Ziggy\Ziggy;
 
@@ -60,6 +62,13 @@ class HandleInertiaRequests extends Middleware
                 'error' => fn() => $request->session()->get('error'),
             ],
             'sidebarOpen' => ! $request->hasCookie('sidebar_state') || $request->cookie('sidebar_state') === 'true',
+            'activeSeasons' => fn() => Cache::remember('shared_active_seasons', now()->addMinutes(60), fn() =>
+                Season::where('is_active', true)
+                    ->orderBy('sort_order')
+                    ->orderBy('title')
+                    ->select('id', 'title', 'slug')
+                    ->get()
+            ),
         ];
     }
 

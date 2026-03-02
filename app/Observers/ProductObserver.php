@@ -5,8 +5,6 @@ namespace App\Observers;
 use App\Models\Product;
 use Illuminate\Support\Facades\Cache;
 
-defined('CACHE_TAGS_AVAILABLE') || define('CACHE_TAGS_AVAILABLE', env('CACHE_DRIVER') === 'redis' || env('CACHE_DRIVER') === 'memcached');
-
 class ProductObserver
 {
     protected const CACHE_TAG = 'client_products';

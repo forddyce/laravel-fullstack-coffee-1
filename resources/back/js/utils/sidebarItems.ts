@@ -45,7 +45,17 @@ const sidebarItems: SidebarItem[] = [
     },
     {
         name: 'Auction Items',
-        href: 'admin.auction-items.index',
+        href: '#',
+        children: [
+            {
+                name: 'All Items',
+                href: 'admin.auction-items.index',
+            },
+            {
+                name: 'Seasons',
+                href: 'admin.seasons.index',
+            },
+        ],
     },
     {
         name: 'User Management',

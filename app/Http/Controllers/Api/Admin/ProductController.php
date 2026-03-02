@@ -12,7 +12,6 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
-use Illuminate\Support\Facades\Auth;
 
 class ProductController extends Controller implements HasMiddleware
 {
@@ -51,12 +50,6 @@ class ProductController extends Controller implements HasMiddleware
     {
         $productData = $request->validated();
 
-        $productData['specifications'] = json_encode($productData['specifications'] ?? []);
-        $productData['images'] = json_encode($productData['images'] ?? []);
-
-        $productData['created_by'] = Auth::check() ? Auth::user()->email : null;
-        $productData['updated_by'] = Auth::check() ? Auth::user()->email : null;
-
         $product = Product::create($productData);
 
         if ($request->has('category_ids')) {
@@ -86,11 +79,6 @@ class ProductController extends Controller implements HasMiddleware
     public function update(ProductRequest $request, Product $product)
     {
         $productData = $request->validated();
-
-        $productData['specifications'] = json_encode($productData['specifications'] ?? []);
-        $productData['images'] = json_encode($productData['images'] ?? []);
-
-        $productData['updated_by'] = Auth::check() ? Auth::user()->email : null;
 
         $product->update($productData);
 

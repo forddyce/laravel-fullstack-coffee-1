@@ -20,6 +20,7 @@ use App\Http\Controllers\Api\Admin\ProductCategoryController as AdminProductCate
 use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Api\Admin\AgentController as AdminAgentController;
 use App\Http\Controllers\Api\Admin\AuctionItemController as AdminAuctionItemController;
+use App\Http\Controllers\Api\Admin\SeasonController as AdminSeasonController;
 
 Route::name('client.')->group(function () {
 
@@ -38,6 +39,7 @@ Route::name('client.')->group(function () {
     Route::get('/product-category/{slug}', [ProductCategoryController::class, 'show'])->name('product-categories.show');
 
     Route::get('/collaborations', [AuctionItemController::class, 'index'])->name('auction-items.index');
+    Route::get('/collaborations/{seasonSlug}', [AuctionItemController::class, 'indexBySeason'])->name('auction-items.by-season');
     Route::get('/collaboration/{slug}', [AuctionItemController::class, 'show'])->name('auction-items.show');
 
     Route::get('/about-us', function () {
@@ -131,5 +133,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::resource('products', AdminProductController::class);
         Route::resource('agents', AdminAgentController::class);
         Route::resource('auction-items', AdminAuctionItemController::class);
+        Route::resource('seasons', AdminSeasonController::class);
     });
 });

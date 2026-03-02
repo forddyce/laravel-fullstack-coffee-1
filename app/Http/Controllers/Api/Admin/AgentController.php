@@ -57,17 +57,6 @@ class AgentController extends Controller implements HasMiddleware
 
     public function show(Agent $agent)
     {
-        $cacheKey = self::CACHE_PREFIX_ADMIN . 'show_' . $agent->id;
-        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
-
-        $agent = $cacheStore->remember(
-            $cacheKey,
-            now()->addMinutes(10),
-            function () use ($agent) {
-                return $agent;
-            }
-        );
-
         return new AgentResource($agent);
     }
 

@@ -26,10 +26,8 @@ class Agent extends Model
         'is_active' => 'boolean',
     ];
 
-    protected static function boot()
+    protected static function booted()
     {
-        parent::boot();
-
         static::creating(function ($agent) {
             if (Auth::check()) {
                 $agent->created_by = Auth::user()->email;

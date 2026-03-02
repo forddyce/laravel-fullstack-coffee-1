@@ -4,8 +4,10 @@ namespace App\Http\Controllers\Api\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\AuctionItem;
+use App\Models\Season;
 use App\Http\Requests\Admin\AuctionItemRequest;
 use App\Http\Resources\AuctionItemResource;
+use App\Http\Resources\SeasonResource;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Routing\Controllers\HasMiddleware;
@@ -30,7 +32,8 @@ class AuctionItemController extends Controller implements HasMiddleware
             $cacheKey,
             now()->addMinutes(5),
             function () use ($request) {
-                return AuctionItem::orderBy($request->query('sortBy', 'title'), $request->query('sortOrder', 'asc'))
+                return AuctionItem::with('season')
+                    ->orderBy($request->query('sortBy', 'title'), $request->query('sortOrder', 'asc'))
                     ->when($request->filled('search'), function ($query) use ($request) {
                         $query->where('title', 'like', '%' . $request->query('search') . '%');
                     })
@@ -46,44 +49,46 @@ class AuctionItemController extends Controller implements HasMiddleware
 
     public function create()
     {
-        return Inertia::render('AuctionItem/Create');
+        $availableSeasons = Season::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('title')
+            ->select('id', 'title')
+            ->get();
+
+        return Inertia::render('AuctionItem/Create', [
+            'availableSeasons' => SeasonResource::collection($availableSeasons),
+        ]);
     }
 
     public function store(AuctionItemRequest $request)
     {
         $itemData = $request->validated();
-        $itemData['info'] = json_encode($itemData['info'] ?? []);
         AuctionItem::create($itemData);
         return redirect()->route('admin.auction-items.index')->with('success', 'Auction Item created successfully!');
     }
 
     public function show(AuctionItem $auctionItem)
     {
-        $cacheKey = self::CACHE_PREFIX_ADMIN . 'show_' . $auctionItem->id;
-        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
-
-        $auctionItem = $cacheStore->remember(
-            $cacheKey,
-            now()->addMinutes(10),
-            function () use ($auctionItem) {
-                return $auctionItem;
-            }
-        );
-
         return new AuctionItemResource($auctionItem);
     }
 
     public function edit(AuctionItem $auctionItem)
     {
+        $availableSeasons = Season::where('is_active', true)
+            ->orderBy('sort_order')
+            ->orderBy('title')
+            ->select('id', 'title')
+            ->get();
+
         return Inertia::render('AuctionItem/Edit', [
-            'auctionItem' => new AuctionItemResource($auctionItem),
+            'auctionItem' => new AuctionItemResource($auctionItem->load('season')),
+            'availableSeasons' => SeasonResource::collection($availableSeasons),
         ]);
     }
 
     public function update(AuctionItemRequest $request, AuctionItem $auctionItem)
     {
         $itemData = $request->validated();
-        $itemData['info'] = json_encode($itemData['info'] ?? []);
         $auctionItem->update($itemData);
         return redirect()->route('admin.auction-items.index')->with('success', 'Auction Item updated successfully!');
     }

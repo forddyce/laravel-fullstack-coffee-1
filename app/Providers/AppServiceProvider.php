@@ -14,6 +14,8 @@ use App\Models\Product;
 use App\Observers\ProductObserver;
 use App\Models\ProductCategory;
 use App\Observers\ProductCategoryObserver;
+use App\Models\Season;
+use App\Observers\SeasonObserver;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Auth\Middleware\Authenticate;
 use Illuminate\Http\Resources\Json\JsonResource;
@@ -45,6 +47,7 @@ class AppServiceProvider extends ServiceProvider
         BlogTag::observe(BlogTagObserver::class);
         Product::observe(ProductObserver::class);
         ProductCategory::observe(ProductCategoryObserver::class);
+        Season::observe(SeasonObserver::class);
 
         JsonResource::withoutWrapping();
     }

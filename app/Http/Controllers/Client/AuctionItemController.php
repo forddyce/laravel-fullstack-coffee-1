@@ -22,6 +22,13 @@ class AuctionItemController extends Controller
         return Inertia::render('AuctionItem/Index')->rootView('front');
     }
 
+    public function indexBySeason(string $seasonSlug): Response
+    {
+        return Inertia::render('AuctionItem/Index', [
+            'seasonSlug' => $seasonSlug,
+        ])->rootView('front');
+    }
+
     public function show(string $slug): Response
     {
         $apiResponse = $this->apiAuctionItemController->show($slug);

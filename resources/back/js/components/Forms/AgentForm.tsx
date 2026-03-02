@@ -5,7 +5,7 @@ import TextAreaInput from '@/back/js/components/FormElements/TextAreaInput';
 import TextInput from '@/back/js/components/FormElements/TextInput';
 import { useNotifications } from '@/back/js/hooks/useNotification';
 import { useForm } from '@inertiajs/react';
-import { ChangeEvent, FormEventHandler, useEffect } from 'react';
+import { ChangeEvent, SubmitEventHandler, useEffect } from 'react';
 import type { Agent } from 'types';
 
 interface AgentFormProps {
@@ -36,7 +36,7 @@ export default function AgentForm({ agent }: AgentFormProps) {
 
     const isSubmitDisabled = processing || !data.title || data.latitude === null || data.longitude === null;
 
-    const submit: FormEventHandler = (e) => {
+    const submit: SubmitEventHandler = (e) => {
         e.preventDefault();
 
         if (agent) {

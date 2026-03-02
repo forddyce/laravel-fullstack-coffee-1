@@ -5,14 +5,15 @@ import TextInput from '@/back/js/components/FormElements/TextInput';
 import RichTextEditor from '@/back/js/components/RichTextEditor';
 import { useNotifications } from '@/back/js/hooks/useNotification';
 import { router, useForm } from '@inertiajs/react';
-import { FormEventHandler, useEffect } from 'react';
-import type { AuctionItem, AuctionItemInfo } from 'types';
+import { SubmitEventHandler, useEffect } from 'react';
+import type { AuctionItem, AuctionItemInfo, Season } from 'types';
 
 interface AuctionItemFormProps {
     auctionItem?: AuctionItem;
+    availableSeasons: Season[];
 }
 
-export default function AuctionItemForm({ auctionItem }: AuctionItemFormProps) {
+export default function AuctionItemForm({ auctionItem, availableSeasons }: AuctionItemFormProps) {
     const {
         data,
         setData,
@@ -21,6 +22,7 @@ export default function AuctionItemForm({ auctionItem }: AuctionItemFormProps) {
         reset,
         recentlySuccessful,
     } = useForm({
+        season_id: auctionItem?.season_id ?? (null as number | null),
         title: auctionItem?.title || '',
         slug: auctionItem?.slug || '',
         info:
@@ -43,6 +45,7 @@ export default function AuctionItemForm({ auctionItem }: AuctionItemFormProps) {
 
     useEffect(() => {
         setData({
+            season_id: auctionItem?.season_id ?? null,
             title: auctionItem?.title || '',
             slug: auctionItem?.slug || '',
             info: (auctionItem?.info || {
@@ -61,7 +64,7 @@ export default function AuctionItemForm({ auctionItem }: AuctionItemFormProps) {
 
     const isSubmitDisabled = processing || !data.title;
 
-    const submit: FormEventHandler = (e) => {
+    const submit: SubmitEventHandler = (e) => {
         e.preventDefault();
 
         const submitData = {
@@ -106,6 +109,25 @@ export default function AuctionItemForm({ auctionItem }: AuctionItemFormProps) {
 
     return (
         <form onSubmit={submit} className="space-y-6">
+            <div>
+                <InputLabel htmlFor="season_id" value="Season" />
+                <select
+                    id="season_id"
+                    name="season_id"
+                    value={data.season_id ?? ''}
+                    onChange={(e) => setData('season_id', e.target.value ? parseInt(e.target.value) : null)}
+                    className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                >
+                    <option value="">— No Season —</option>
+                    {availableSeasons.map((season) => (
+                        <option key={season.id} value={season.id}>
+                            {season.title}
+                        </option>
+                    ))}
+                </select>
+                {errors.season_id && <InputError message={errors.season_id} className="mt-2" />}
+            </div>
+
             <div>
                 <TextInput
                     id="title"

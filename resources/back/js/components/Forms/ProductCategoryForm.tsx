@@ -4,7 +4,7 @@ import InputLabel from '@/back/js/components/FormElements/InputLabel';
 import TextInput from '@/back/js/components/FormElements/TextInput';
 import { useNotifications } from '@/back/js/hooks/useNotification';
 import { useForm } from '@inertiajs/react';
-import { ChangeEvent, FormEventHandler, useEffect } from 'react';
+import { ChangeEvent, SubmitEventHandler, useEffect } from 'react';
 import type { ProductCategory } from 'types';
 
 interface ProductCategoryFormProps {
@@ -29,7 +29,7 @@ export default function ProductCategoryForm({ productCategory }: ProductCategory
 
     const isSubmitDisabled = processing || !data.title;
 
-    const submit: FormEventHandler = (e) => {
+    const submit: SubmitEventHandler = (e) => {
         e.preventDefault();
 
         if (productCategory) {

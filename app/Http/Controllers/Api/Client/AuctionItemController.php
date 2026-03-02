@@ -33,11 +33,18 @@ class AuctionItemController extends Controller
             function () use ($request) {
                 $perPage = $request->query('perPage', 10);
                 $search = $request->query('search');
+                $seasonSlug = $request->query('season');
 
                 return AuctionItem::where('is_active', true)
                     ->when($search, function (Builder $query, $search) {
                         $query->where('title', 'like', '%' . $search . '%');
                     })
+                    ->when($seasonSlug, function (Builder $query) use ($seasonSlug) {
+                        $query->whereHas('season', function (Builder $q) use ($seasonSlug) {
+                            $q->where('slug', $seasonSlug);
+                        });
+                    })
+                    ->with('season')
                     ->orderBy('title', 'asc')
                     ->paginate($perPage);
             }
@@ -64,6 +71,7 @@ class AuctionItemController extends Controller
             function () use ($slug) {
                 return AuctionItem::where('slug', $slug)
                     ->where('is_active', true)
+                    ->with('season')
                     ->first();
             }
         );

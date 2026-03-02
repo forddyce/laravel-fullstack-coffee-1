@@ -1,6 +1,6 @@
 import { useNotifications } from '@/back/js/hooks/useNotification';
 import { useForm } from '@inertiajs/react';
-import { FormEventHandler, useEffect } from 'react';
+import { SubmitEventHandler, useEffect } from 'react';
 import { BlogTag } from 'types';
 import Button from '../FormElements/Button';
 import TextInput from '../FormElements/TextInput';
@@ -25,7 +25,7 @@ export default function BlogTagForm({ blogTag }: BlogTagFormProps) {
         reset();
     }, [blogTag]);
 
-    const submit: FormEventHandler = (e) => {
+    const submit: SubmitEventHandler = (e) => {
         e.preventDefault();
 
         if (blogTag) {

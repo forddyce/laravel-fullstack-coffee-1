@@ -61,17 +61,6 @@ class ProductCategoryController extends Controller implements HasMiddleware
 
     public function show(ProductCategory $productCategory)
     {
-        $cacheKey = self::CACHE_PREFIX_ADMIN . 'show_' . $productCategory->id;
-        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
-
-        $productCategory = $cacheStore->remember(
-            $cacheKey,
-            now()->addMinutes(10),
-            function () use ($productCategory) {
-                return $productCategory;
-            }
-        );
-
         return new ProductCategoryResource($productCategory);
     }
 

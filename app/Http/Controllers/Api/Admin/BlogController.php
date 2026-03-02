@@ -79,18 +79,7 @@ class BlogController extends Controller implements HasMiddleware
 
     public function show(Blog $blog)
     {
-        $cacheKey = self::CACHE_PREFIX_ADMIN . 'show_' . $blog->slug;
-        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
-
-        $blog = $cacheStore->remember(
-            $cacheKey,
-            now()->addMinutes(10),
-            function () use ($blog) {
-                return $blog->load('tags');
-            }
-        );
-
-        return new BlogResource($blog);
+        return new BlogResource($blog->load('tags'));
     }
 
     public function edit(Blog $blog)

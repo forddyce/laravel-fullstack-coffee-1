@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\Client\BlogController;
 use App\Http\Controllers\Api\Client\ProductController;
 use App\Http\Controllers\Api\Client\AgentController;
 use App\Http\Controllers\Api\Client\AuctionItemController;
+use App\Http\Controllers\Api\Client\SeasonController;
 use App\Http\Controllers\Api\Client\SubscribeController;
 use App\Http\Controllers\Api\Client\InstagramController;
 
@@ -31,6 +32,8 @@ Route::prefix('client')->name('api.client.')->group(function () {
 
     Route::get('auction-items', [AuctionItemController::class, 'index'])->name('auction-items.index');
     Route::get('auction-items/{slug}', [AuctionItemController::class, 'show'])->name('auction-items.show');
+
+    Route::get('seasons', [SeasonController::class, 'index'])->name('seasons.index');
 
     Route::post('subscribe', [SubscribeController::class, 'createSub'])->name('subscribe');
     Route::get('instagram/latest', [InstagramController::class, 'latestImages'])->name('instagram.latest');

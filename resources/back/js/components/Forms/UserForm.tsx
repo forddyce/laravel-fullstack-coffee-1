@@ -1,7 +1,7 @@
 import { useNotifications } from '@/back/js/hooks/useNotification';
 import type { PageProps } from '@inertiajs/core';
 import { useForm } from '@inertiajs/react';
-import { FormEventHandler, useEffect } from 'react';
+import { SubmitEventHandler, useEffect } from 'react';
 import type { Role, User } from 'types';
 import Button from '../FormElements/Button';
 import type { SelectOption } from '../FormElements/CustomSelect';
@@ -63,7 +63,7 @@ export default function UserForm({ user, availableRoles }: UserFormProps) {
         return false;
     };
 
-    const submit: FormEventHandler = (e) => {
+    const submit: SubmitEventHandler = (e) => {
         e.preventDefault();
 
         if (user) {

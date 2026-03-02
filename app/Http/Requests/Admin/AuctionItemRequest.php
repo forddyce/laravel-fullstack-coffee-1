@@ -15,6 +15,7 @@ class AuctionItemRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
+            'season_id' => ['nullable', 'integer', 'exists:seasons,id'],
             'title' => [
                 'required',
                 'string',

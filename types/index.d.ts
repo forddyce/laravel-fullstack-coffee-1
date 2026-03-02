@@ -97,6 +97,18 @@ export interface Agent {
     updated_at: string;
 }
 
+export interface Season {
+    id: number;
+    title: string;
+    slug: string;
+    sort_order: number;
+    is_active: boolean;
+    created_by: string | null;
+    updated_by: string | null;
+    created_at: string;
+    updated_at: string;
+}
+
 export interface AuctionItemInfo {
     type: string;
     score: string;
@@ -108,6 +120,8 @@ export interface AuctionItemInfo {
 
 export interface AuctionItem {
     id: number;
+    season_id: number | null;
+    season: Season | null;
     title: string;
     slug: string;
     info: AuctionItemInfo;

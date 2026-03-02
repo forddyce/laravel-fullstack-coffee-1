@@ -5,8 +5,6 @@ namespace App\Observers;
 use App\Models\Agent;
 use Illuminate\Support\Facades\Cache;
 
-defined('CACHE_TAGS_AVAILABLE') || define('CACHE_TAGS_AVAILABLE', env('CACHE_DRIVER') === 'redis' || env('CACHE_DRIVER') === 'memcached');
-
 class AgentObserver
 {
     protected const CACHE_TAG = 'agents';
@@ -38,7 +36,6 @@ class AgentObserver
         $this->clearAgentCaches();
         if (!CACHE_TAGS_AVAILABLE) {
             Cache::forget(self::CACHE_PREFIX_ADMIN . 'show_' . $agent->id);
-            Cache::forget(self::CACHE_PREFIX_CLIENT . 'show_' . $agent->slug);
         }
     }
 
@@ -50,7 +47,6 @@ class AgentObserver
         $this->clearAgentCaches();
         if (!CACHE_TAGS_AVAILABLE) {
             Cache::forget(self::CACHE_PREFIX_ADMIN . 'show_' . $agent->id);
-            Cache::forget(self::CACHE_PREFIX_CLIENT . 'show_' . $agent->slug);
         }
     }
 

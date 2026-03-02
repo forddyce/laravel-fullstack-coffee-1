@@ -118,6 +118,12 @@ export default function AuctionItemIndex() {
                                                 scope="col"
                                                 className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
                                             >
+                                                Season
+                                            </th>
+                                            <th
+                                                scope="col"
+                                                className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500"
+                                            >
                                                 Type
                                             </th>
                                             <th
@@ -154,6 +160,7 @@ export default function AuctionItemIndex() {
                                             auctionItems.data.map((item) => (
                                                 <tr key={item.id}>
                                                     <td className="px-6 py-4 text-sm font-medium text-gray-900">{item.title}</td>
+                                                    <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{item.season?.title || '—'}</td>
                                                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{item.info?.type || 'N/A'}</td>
                                                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">{item.info?.score || 'N/A'}</td>
                                                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-500">
@@ -183,7 +190,7 @@ export default function AuctionItemIndex() {
                                             ))
                                         ) : (
                                             <tr>
-                                                <td colSpan={7} className="px-6 py-4 text-center text-sm text-gray-500">
+                                                <td colSpan={8} className="px-6 py-4 text-center text-sm text-gray-500">
                                                     No auction items found.
                                                 </td>
                                             </tr>

@@ -4,35 +4,28 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Sluggable\HasSlug;
 use Spatie\Sluggable\SlugOptions;
 
-class AuctionItem extends Model
+class Season extends Model
 {
     use HasFactory, HasSlug;
 
     protected $fillable = [
-        'season_id',
         'title',
         'slug',
-        'info',
-        'content',
+        'sort_order',
         'is_active',
         'created_by',
         'updated_by',
     ];
 
     protected $casts = [
-        'info' => 'array',
         'is_active' => 'boolean',
+        'sort_order' => 'integer',
     ];
-
-    public function season(): BelongsTo
-    {
-        return $this->belongsTo(Season::class);
-    }
 
     public function getSlugOptions(): SlugOptions
     {
@@ -42,17 +35,22 @@ class AuctionItem extends Model
             ->doNotGenerateSlugsOnUpdate();
     }
 
-    protected static function booted()
+    public function auctionItems(): HasMany
     {
-        static::creating(function ($item) {
+        return $this->hasMany(AuctionItem::class);
+    }
+
+    protected static function booted(): void
+    {
+        static::creating(function ($season) {
             if (Auth::check()) {
-                $item->created_by = Auth::user()->email;
+                $season->created_by = Auth::user()->email;
             }
         });
 
-        static::updating(function ($item) {
+        static::updating(function ($season) {
             if (Auth::check()) {
-                $item->updated_by = Auth::user()->email;
+                $season->updated_by = Auth::user()->email;
             }
         });
     }

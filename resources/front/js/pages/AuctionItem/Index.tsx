@@ -1,22 +1,36 @@
 import ClientLayout from '@/front/js/layouts/ClientLayout';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, usePage } from '@inertiajs/react';
+import type { PageProps as BasePageProps } from '@inertiajs/core';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { FaWhatsapp } from 'react-icons/fa';
-import type { AuctionItem } from 'types';
+import type { AuctionItem, Season } from 'types';
 import { whatsappLink } from '../../utils/misc';
 
+interface PageProps extends BasePageProps {
+    seasonSlug?: string;
+    activeSeasons: Season[];
+}
+
 export default function AuctionItemIndexPage() {
+    const { seasonSlug, activeSeasons } = usePage<PageProps>().props;
+
     const [auctionItems, setAuctionItems] = useState<AuctionItem[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
 
+    const currentSeason = seasonSlug ? activeSeasons.find((s) => s.slug === seasonSlug) : null;
+
     useEffect(() => {
+        setLoading(true);
+        setAuctionItems([]);
+
         const fetchAuctionItems = async () => {
             try {
-                const response = await axios.get(route('api.client.auction-items.index'), {
-                    params: { perPage: 999 },
-                });
+                const params: Record<string, string | number> = { perPage: 999 };
+                if (seasonSlug) params.season = seasonSlug;
+
+                const response = await axios.get(route('api.client.auction-items.index'), { params });
                 setAuctionItems(response.data.data);
                 setLoading(false);
             } catch (err) {
@@ -27,14 +41,22 @@ export default function AuctionItemIndexPage() {
         };
 
         fetchAuctionItems();
-    }, []);
+    }, [seasonSlug]);
+
+    const pageTitle = currentSeason
+        ? `WE Kopi Kolaborasi ${currentSeason.title} - WE Coffee Roasters`
+        : 'WE Kopi Kolaborasi - WE Coffee Roasters';
+
+    const heading = currentSeason
+        ? `Data Peserta Lelang WE Kopi Kolaborasi — ${currentSeason.title}`
+        : 'Data Peserta Lelang WE Kopi Kolaborasi';
 
     return (
         <ClientLayout>
-            <Head title={'WE Kopi Kolaborasi - WE Coffee Roasters'} />
+            <Head title={pageTitle} />
             <div className="py-8">
                 <div className="mx-auto max-w-6xl rounded-lg bg-white p-6 px-4 sm:px-6 lg:px-8">
-                    <h1 className="title-underline mb-6 text-center text-4xl font-bold text-gray-900">Data Peserta Lelang WE Kopi Kolaborasi 2024</h1>
+                    <h1 className="title-underline mb-6 text-center text-4xl font-bold text-gray-900">{heading}</h1>
                     <div className="static-content max-w-none leading-relaxed text-gray-700">
                         <div className="mb-8 text-center">
                             <a

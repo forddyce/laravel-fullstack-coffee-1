@@ -16,6 +16,8 @@ class AuctionItemResource extends JsonResource
     {
         return [
             'id' => $this->id,
+            'season_id' => $this->season_id,
+            'season' => new SeasonResource($this->whenLoaded('season')),
             'title' => $this->title,
             'slug' => $this->slug,
             'info' => is_array($this->info) ? $this->info : json_decode($this->info ?? '[]', true),

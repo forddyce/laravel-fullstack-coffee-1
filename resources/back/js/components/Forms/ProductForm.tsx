@@ -8,7 +8,7 @@ import TextInput from '@/back/js/components/FormElements/TextInput';
 import RichTextEditor from '@/back/js/components/RichTextEditor';
 import { useNotifications } from '@/back/js/hooks/useNotification';
 import { router, useForm } from '@inertiajs/react';
-import { FormEventHandler, useCallback, useEffect, useRef } from 'react';
+import { SubmitEventHandler, useCallback, useEffect, useRef } from 'react';
 import type { Product } from 'types';
 
 interface ProductFormProps {
@@ -72,7 +72,7 @@ export default function ProductForm({ product, availableCategories }: ProductFor
 
     const isSubmitDisabled = processing || !data.title || !data.price;
 
-    const submit: FormEventHandler = (e) => {
+    const submit: SubmitEventHandler = (e) => {
         e.preventDefault();
 
         const submitData = {

@@ -8,7 +8,7 @@ import ImagePicker from '@/back/js/components/ImagePicker';
 import RichTextEditor from '@/back/js/components/RichTextEditor';
 import { useNotifications } from '@/back/js/hooks/useNotification';
 import { router, useForm } from '@inertiajs/react';
-import { ChangeEvent, FormEventHandler, useEffect } from 'react';
+import { ChangeEvent, SubmitEventHandler, useEffect } from 'react';
 import type { Blog } from 'types';
 
 interface BlogFormProps {
@@ -40,7 +40,7 @@ export default function BlogForm({ blog, availableTags }: BlogFormProps) {
 
     const isSubmitDisabled = processing;
 
-    const submit: FormEventHandler = (e) => {
+    const submit: SubmitEventHandler = (e) => {
         e.preventDefault();
 
         // eslint-disable-next-line
