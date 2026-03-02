@@ -102,10 +102,10 @@ export default function AuctionItemIndexPage() {
                                             </th>
                                         </tr>
                                     </thead>
-                                    <tbody className="divide-y divide-gray-200 bg-white">
+                                    <tbody className="divide-y divide-gray-200">
                                         {auctionItems &&
                                             auctionItems.map((item) => (
-                                                <tr key={item.id} className="hover:bg-gray-50">
+                                                <tr key={item.id} className="odd:bg-white even:bg-gray-200 hover:bg-amber-50">
                                                     <td className="text-brand-primary whitespace-nowrap px-6 py-4 text-sm font-medium">
                                                         <Link href={route('client.auction-items.show', item.slug)} className="hover:underline">
                                                             {item.title}
