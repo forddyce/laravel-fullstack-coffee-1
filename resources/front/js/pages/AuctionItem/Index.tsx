@@ -21,6 +21,8 @@ export default function AuctionItemIndexPage() {
 
     const currentSeason = seasonSlug ? activeSeasons.find((s) => s.slug === seasonSlug) : null;
 
+    const showAuctionPrice = currentSeason?.title === 'Season 4' || currentSeason?.title === 'Season 5';
+
     useEffect(() => {
         setLoading(true);
         setAuctionItems([]);
@@ -97,9 +99,11 @@ export default function AuctionItemIndexPage() {
                                             <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">
                                                 SKOR
                                             </th>
+                                            {showAuctionPrice && (
                                             <th scope="col" className="px-6 py-3 text-left text-xs font-bold uppercase tracking-wider text-white">
                                                 HARGA AWAL LELANG (PER KG)
                                             </th>
+                                            )}
                                         </tr>
                                     </thead>
                                     <tbody className="divide-y divide-gray-200">
@@ -122,9 +126,11 @@ export default function AuctionItemIndexPage() {
                                                         {item.info?.farmer || 'N/A'}
                                                     </td>
                                                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-700">{item.info?.score || 'N/A'}</td>
+                                                    {showAuctionPrice && (
                                                     <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-700">
                                                         Rp. {item.info?.auction_price ? item.info.auction_price.toLocaleString('id-ID') : 'N/A'}
                                                     </td>
+                                                    )}
                                                 </tr>
                                             ))}
                                     </tbody>
