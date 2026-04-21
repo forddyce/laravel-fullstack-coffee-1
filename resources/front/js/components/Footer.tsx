@@ -1,5 +1,6 @@
 import { Link } from '@inertiajs/react';
-import { Clock, Facebook, Instagram, Mail, MapPin, Phone, Youtube } from 'lucide-react';
+import { Clock, Mail, MapPin, Phone } from 'lucide-react';
+import { SiFacebook, SiInstagram, SiYoutube } from 'react-icons/si';
 
 export default function ClientFooter() {
     return (
@@ -56,7 +57,7 @@ export default function ClientFooter() {
                                     aria-label="Instagram"
                                     className="hover:text-gray-300"
                                 >
-                                    <Instagram className="h-6 w-6" />
+                                    <SiInstagram className="h-6 w-6" />
                                 </a>
                                 <a
                                     href="https://www.facebook.com/wiliamedison.coffee/"
@@ -64,7 +65,7 @@ export default function ClientFooter() {
                                     aria-label="Facebook"
                                     className="hover:text-gray-300"
                                 >
-                                    <Facebook className="h-6 w-6" />
+                                    <SiFacebook className="h-6 w-6" />
                                 </a>
                                 <a
                                     href="https://www.youtube.com/user/wiliamedison"
@@ -72,7 +73,7 @@ export default function ClientFooter() {
                                     aria-label="YouTube"
                                     className="hover:text-gray-300"
                                 >
-                                    <Youtube className="h-6 w-6" />
+                                    <SiYoutube className="h-6 w-6" />
                                 </a>
                             </div>
                         </div>

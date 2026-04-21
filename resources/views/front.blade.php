@@ -32,7 +32,7 @@
         }
     </style>
 
-    <title inertia>{{ config('app.name', 'WE Coffee') }}</title>
+    <title data-inertia>{{ config('app.name', 'WE Coffee') }}</title>
 
     <link rel="icon" href="/favicon.ico" sizes="any">
     <link rel="apple-touch-icon" href="/apple-touch-icon.png">

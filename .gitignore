@@ -24,3 +24,5 @@ yarn-error.log
 /.zed
 /database/seeders/AdminSeeder.php
 notes.txt
+composer.lock
+package-lock.json

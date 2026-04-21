@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { Instagram as InstagramIcon } from 'lucide-react';
+import { SiInstagram as InstagramIcon } from 'react-icons/si';
 import { useEffect, useState } from 'react';
 
 interface InstagramImage {
