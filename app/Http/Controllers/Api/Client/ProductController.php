@@ -42,11 +42,12 @@ class ProductController extends Controller
                         $query->where('title', 'like', '%' . $search . '%');
                     })
                     ->orderBy($sortBy, $sortOrder)
-                    ->paginate($perPage);
+                    ->paginate($perPage)
+                    ->toArray();
             }
         );
 
-        return $products;
+        return response()->json($products);
     }
 
     /**
@@ -88,8 +89,8 @@ class ProductController extends Controller
                 }
 
                 return [
-                    'product' => new ProductResource($product),
-                    'related_products' => ProductResource::collection($relatedProducts),
+                    'product' => (new ProductResource($product))->resolve(),
+                    'related_products' => ProductResource::collection($relatedProducts)->resolve(),
                 ];
             }
         );
@@ -125,14 +126,16 @@ class ProductController extends Controller
             $cacheKey,
             now()->addMinutes(60),
             function () use ($ids) {
-                return Product::where('is_active', true)
-                    ->whereIn('id', $ids)
-                    ->orderByRaw('FIELD(id, ' . implode(',', $ids) . ')')
-                    ->get();
+                return ProductResource::collection(
+                    Product::where('is_active', true)
+                        ->whereIn('id', $ids)
+                        ->orderByRaw('FIELD(id, ' . implode(',', $ids) . ')')
+                        ->get()
+                )->resolve();
             }
         );
 
-        return ProductResource::collection($products);
+        return response()->json(['data' => $products]);
     }
 
     /**
@@ -172,7 +175,7 @@ class ProductController extends Controller
                     ->paginate($perPage);
 
                 return [
-                    'category' => new ProductCategoryResource($category),
+                    'category' => (new ProductCategoryResource($category))->resolve(),
                     'products' => ProductResource::collection($products)->response()->getData(true)
                 ];
             }
@@ -198,11 +201,13 @@ class ProductController extends Controller
             $cacheKey,
             now()->addMinutes(60),
             function () {
-                return ProductCategory::where('is_active', true)
-                    ->orderBy('title', 'asc')
-                    ->get();
+                return ProductCategoryResource::collection(
+                    ProductCategory::where('is_active', true)
+                        ->orderBy('title', 'asc')
+                        ->get()
+                )->resolve();
             }
         );
-        return ProductCategoryResource::collection($categories);
+        return response()->json(['data' => $categories]);
     }
 }

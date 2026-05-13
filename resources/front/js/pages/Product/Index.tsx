@@ -50,7 +50,7 @@ export default function ProductIndex() {
         const fetchCategories = async () => {
             try {
                 const response = await axios.get(route('api.client.product-categories.index_all'));
-                setAvailableCategories(response.data); // Assuming data is nested under 'data'
+                setAvailableCategories(response.data.data);
             } catch (err) {
                 console.error('Failed to load categories:', err);
             }

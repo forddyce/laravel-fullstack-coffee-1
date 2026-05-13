@@ -31,15 +31,17 @@ class BlogController extends Controller
             $cacheKey,
             now()->addMinutes(60),
             function () {
-                return Blog::where('is_active', true)
-                    ->where('published_date', '<=', now())
-                    ->orderBy('published_date', 'desc')
-                    ->take(3)
-                    ->get();
+                return BlogResource::collection(
+                    Blog::where('is_active', true)
+                        ->where('published_date', '<=', now())
+                        ->orderBy('published_date', 'desc')
+                        ->take(3)
+                        ->get()
+                )->resolve();
             }
         );
 
-        return BlogResource::collection($blogs);
+        return response()->json(['data' => $blogs]);
     }
 
     /**
@@ -68,11 +70,12 @@ class BlogController extends Controller
                         $query->where('title', 'like', '%' . $search . '%');
                     })
                     ->orderBy('published_date', 'desc')
-                    ->paginate($perPage);
+                    ->paginate($perPage)
+                    ->toArray();
             }
         );
 
-        return $blogs;
+        return response()->json($blogs);
     }
 
     /**
@@ -115,7 +118,7 @@ class BlogController extends Controller
                     ->paginate($perPage);
 
                 return [
-                    'tag' => new BlogTagResource($tag),
+                    'tag' => (new BlogTagResource($tag))->resolve(),
                     'blogs' => BlogResource::collection($blogs)->response()->getData(true)
                 ];
             }
@@ -170,8 +173,8 @@ class BlogController extends Controller
                 }
 
                 return [
-                    'blog' => new BlogResource($blog),
-                    'related_blogs' => BlogResource::collection($relatedBlogs),
+                    'blog' => (new BlogResource($blog))->resolve(),
+                    'related_blogs' => BlogResource::collection($relatedBlogs)->resolve(),
                 ];
             }
         );

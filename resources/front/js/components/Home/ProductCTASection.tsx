@@ -21,7 +21,7 @@ export default function ProductCTASection() {
                 const params = new URLSearchParams();
                 featuredProductIds.forEach((id) => params.append('ids[]', id.toString()));
                 const response = await axios.get(route('api.client.products.by-ids') + `?${params.toString()}`);
-                setProducts(response.data);
+                setProducts(response.data.data);
                 setLoading(false);
             } catch (err) {
                 setError('Failed to load featured products.');

@@ -25,13 +25,15 @@ class SeasonController extends Controller
             $cacheKey,
             now()->addMinutes(60),
             function () {
-                return Season::where('is_active', true)
-                    ->orderBy('sort_order')
-                    ->orderBy('title')
-                    ->get();
+                return SeasonResource::collection(
+                    Season::where('is_active', true)
+                        ->orderBy('sort_order')
+                        ->orderBy('title')
+                        ->get()
+                )->resolve();
             }
         );
 
-        return SeasonResource::collection($seasons);
+        return response()->json(['data' => $seasons]);
     }
 }

@@ -21,7 +21,7 @@ class ProductController extends Controller
     public function index(Request $request): Response
     {
         $apiResponse = $this->apiProductController->index($request);
-        $productsData = $apiResponse->toArray($request);
+        $productsData = $apiResponse->getData(true);
 
         return Inertia::render('Product/Index', [
             'products' => [

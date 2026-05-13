@@ -21,7 +21,7 @@ class BlogController extends Controller
     public function index(Request $request): Response
     {
         $apiResponse = $this->apiBlogController->index($request);
-        $blogsData = $apiResponse->toArray($request);
+        $blogsData = $apiResponse->getData(true);
 
         return Inertia::render('Blog/Index', [
             'blogs' => [

@@ -13,7 +13,7 @@ export default function RoastAndBrewPage() {
         const fetchAgents = async () => {
             try {
                 const response = await axios.get(route('api.client.agents.index'));
-                setAgents(response.data);
+                setAgents(response.data.data);
                 setLoading(false);
             } catch (err) {
                 setError('Failed to load agent locations.');

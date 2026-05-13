@@ -13,7 +13,7 @@ export default function LatestNewsSection() {
         const fetchLatestBlogs = async () => {
             try {
                 const response = await axios.get(route('api.client.blogs.latest'));
-                setLatestBlogs(response.data);
+                setLatestBlogs(response.data.data);
                 setLoading(false);
             } catch (err) {
                 setError('Failed to load latest news.');

@@ -29,12 +29,14 @@ class AgentController extends Controller
             $cacheKey,
             now()->addMinutes(60),
             function () {
-                return Agent::where('is_active', true)
-                    ->orderBy('title', 'asc')
-                    ->get();
+                return AgentResource::collection(
+                    Agent::where('is_active', true)
+                        ->orderBy('title', 'asc')
+                        ->get()
+                )->resolve();
             }
         );
 
-        return AgentResource::collection($agents);
+        return response()->json(['data' => $agents]);
     }
 }

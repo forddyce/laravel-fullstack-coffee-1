@@ -35,22 +35,24 @@ class AuctionItemController extends Controller
                 $search = $request->query('search');
                 $seasonSlug = $request->query('season');
 
-                return AuctionItem::where('is_active', true)
-                    ->when($search, function (Builder $query, $search) {
-                        $query->where('title', 'like', '%' . $search . '%');
-                    })
-                    ->when($seasonSlug, function (Builder $query) use ($seasonSlug) {
-                        $query->whereHas('season', function (Builder $q) use ($seasonSlug) {
-                            $q->where('slug', $seasonSlug);
-                        });
-                    })
-                    ->with('season')
-                    ->orderBy('title', 'asc')
-                    ->paginate($perPage);
+                return AuctionItemResource::collection(
+                    AuctionItem::where('is_active', true)
+                        ->when($search, function (Builder $query, $search) {
+                            $query->where('title', 'like', '%' . $search . '%');
+                        })
+                        ->when($seasonSlug, function (Builder $query) use ($seasonSlug) {
+                            $query->whereHas('season', function (Builder $q) use ($seasonSlug) {
+                                $q->where('slug', $seasonSlug);
+                            });
+                        })
+                        ->with('season')
+                        ->orderBy('title', 'asc')
+                        ->paginate($perPage)
+                )->response()->getData(true);
             }
         );
 
-        return AuctionItemResource::collection($auctionItems);
+        return response()->json($auctionItems);
     }
 
     /**
@@ -69,10 +71,12 @@ class AuctionItemController extends Controller
             $cacheKey,
             now()->addMinutes(60),
             function () use ($slug) {
-                return AuctionItem::where('slug', $slug)
+                $item = AuctionItem::where('slug', $slug)
                     ->where('is_active', true)
                     ->with('season')
                     ->first();
+
+                return $item ? (new AuctionItemResource($item))->resolve() : null;
             }
         );
 
@@ -80,6 +84,6 @@ class AuctionItemController extends Controller
             return response()->json(['message' => 'Auction item not found or not active.'], 404);
         }
 
-        return new AuctionItemResource($auctionItem);
+        return response()->json(['data' => $auctionItem]);
     }
 }
