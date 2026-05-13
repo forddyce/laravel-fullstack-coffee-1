@@ -12,7 +12,7 @@ export default function ClientFooter() {
                             <img src="/logo-white.webp" alt="WE Coffee" className="mr-3 h-16 w-auto" />
                         </div>
                         <p className="text-sm leading-relaxed">
-                            Hello! We are William Edison Production, a company that is passionate about making and selling coffee with a great flavor.
+                            Hello! We are Wiliam Edison Production, a company that is passionate about making and selling coffee with a great flavor.
                             Our team of dedicated coffee experts celebrates exceptional coffee brands and roasters by providing our guests the unique
                             opportunity to try coffee the highest quality.
                         </p>
@@ -24,10 +24,9 @@ export default function ClientFooter() {
                             <div className="flex items-start">
                                 <MapPin className="mr-3 mt-1 h-5 w-5" />
                                 <p className="text-sm">
-                                    PT WILLINDO JAYA UTAMA <br />
-                                    De Mansion Blok E No. 3, Alamsutera, <br />
-                                    RT.001/RW.014, Kunciran, Kec. Pinang, Tangerang <br />
-                                    Kota, Banten 15143
+                                    Ruko RSA 2, Grand Galaxy City No.25, <br />
+                                    Jaka Setia, Kec. Bekasi Selatan, <br />
+                                    Kota Bekasi, Jawa Barat 17141
                                 </p>
                             </div>
                             <div className="flex items-start">
