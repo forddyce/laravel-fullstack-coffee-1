@@ -1,5 +1,5 @@
 import type { SelectProps } from 'react-dropdown-select';
-import Select from 'react-dropdown-select';
+import { Select } from 'react-dropdown-select';
 import InputError from './InputError';
 import InputLabel from './InputLabel';
 

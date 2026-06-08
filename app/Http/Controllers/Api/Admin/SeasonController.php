@@ -9,7 +9,6 @@ use App\Http\Resources\SeasonResource;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Support\Facades\Cache;
 
 class SeasonController extends Controller implements HasMiddleware
 {
@@ -23,20 +22,11 @@ class SeasonController extends Controller implements HasMiddleware
 
     public function index(Request $request)
     {
-        $cacheKey = self::CACHE_PREFIX_ADMIN . 'index_' . md5(json_encode($request->query()));
-        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
-
-        $seasons = $cacheStore->remember(
-            $cacheKey,
-            now()->addMinutes(5),
-            function () use ($request) {
-                return Season::orderBy($request->query('sortBy', 'sort_order'), $request->query('sortOrder', 'asc'))
-                    ->when($request->filled('search'), function ($query) use ($request) {
-                        $query->where('title', 'like', '%' . $request->query('search') . '%');
-                    })
-                    ->paginate($request->query('perPage', 10));
-            }
-        );
+        $seasons = Season::orderBy($request->query('sortBy', 'sort_order'), $request->query('sortOrder', 'asc'))
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $query->where('title', 'like', '%' . $request->query('search') . '%');
+            })
+            ->paginate($request->query('perPage', 10));
 
         return Inertia::render('Season/Index', [
             'seasons' => SeasonResource::collection($seasons),

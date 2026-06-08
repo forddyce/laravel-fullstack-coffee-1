@@ -28,20 +28,12 @@ class BlogController extends Controller implements HasMiddleware
 
     public function index(Request $request)
     {
-        $cacheKey = self::CACHE_PREFIX_ADMIN . 'index_' . md5(json_encode($request->query()));
-        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
-        $blogs = $cacheStore->remember(
-            $cacheKey,
-            now()->addMinutes(5),
-            function () use ($request) {
-                return Blog::with('tags')
-                    ->orderBy($request->query('sortBy', 'published_date'), $request->query('sortOrder', 'desc'))
-                    ->when($request->filled('search'), function ($query) use ($request) {
-                        $query->where('title', 'like', '%' . $request->query('search') . '%');
-                    })
-                    ->paginate($request->query('perPage', 10));
-            }
-        );
+        $blogs = Blog::with('tags')
+            ->orderBy($request->query('sortBy', 'published_date'), $request->query('sortOrder', 'desc'))
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $query->where('title', 'like', '%' . $request->query('search') . '%');
+            })
+            ->paginate($request->query('perPage', 10));
 
         return Inertia::render('Blog/Index', [
             'blogs' => BlogResource::collection($blogs),

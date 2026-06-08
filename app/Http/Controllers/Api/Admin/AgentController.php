@@ -9,7 +9,6 @@ use App\Http\Resources\AgentResource;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Illuminate\Routing\Controllers\HasMiddleware;
-use Illuminate\Support\Facades\Cache;
 
 class AgentController extends Controller implements HasMiddleware
 {
@@ -23,19 +22,11 @@ class AgentController extends Controller implements HasMiddleware
 
     public function index(Request $request)
     {
-        $cacheKey = self::CACHE_PREFIX_ADMIN . 'index_' . md5(json_encode($request->query()));
-        $cacheStore = CACHE_TAGS_AVAILABLE ? Cache::tags(self::CACHE_TAG) : Cache::getFacadeRoot();
-        $agents = $cacheStore->remember(
-            $cacheKey,
-            now()->addMinutes(5),
-            function () use ($request) {
-                return Agent::orderBy($request->query('sortBy', 'title'), $request->query('sortOrder', 'asc'))
-                    ->when($request->filled('search'), function ($query) use ($request) {
-                        $query->where('title', 'like', '%' . $request->query('search') . '%');
-                    })
-                    ->paginate($request->query('perPage', 10));
-            }
-        );
+        $agents = Agent::orderBy($request->query('sortBy', 'title'), $request->query('sortOrder', 'asc'))
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $query->where('title', 'like', '%' . $request->query('search') . '%');
+            })
+            ->paginate($request->query('perPage', 10));
 
         return Inertia::render('Agent/Index', [
             'agents' => AgentResource::collection($agents),
