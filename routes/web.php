@@ -105,7 +105,7 @@ Route::name('client.')->group(function () {
 
 Route::post('logout', [LogoutController::class, 'store'])->middleware('auth')->name('logout');
 
-Route::prefix('admin')->name('admin.')->group(function () {
+Route::prefix('admin')->name('admin.')->middleware('inertia.rootview:back')->group(function () {
     Route::get('login', [LoginController::class, 'create'])->name('login');
     Route::post('login', [LoginController::class, 'store']);
 
