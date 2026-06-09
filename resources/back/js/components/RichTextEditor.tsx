@@ -130,6 +130,7 @@ export default function RichTextEditor({ id, value, label, error, onChange, clas
                     image_advtab: true,
                     relative_urls: false,
                     remove_script_host: false,
+                    file_picker_types: 'file image',
                     file_picker_callback: fileBrowserCallback,
                 }}
             />

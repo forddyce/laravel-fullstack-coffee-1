@@ -50,12 +50,12 @@ class BlogController extends Controller implements HasMiddleware
             $cacheKey,
             now()->addMinutes(60),
             function () {
-                return BlogTag::where('is_active', true)->select('id', 'title')->get();
+                return BlogTag::where('is_active', true)->select('id', 'title')->get()->toArray();
             }
         );
 
         return Inertia::render('Blog/Create', [
-            'availableTags' => BlogTagResource::collection($blogTags),
+            'availableTags' => $blogTags,
         ]);
     }
 
@@ -82,13 +82,13 @@ class BlogController extends Controller implements HasMiddleware
             $cacheKey,
             now()->addMinutes(60),
             function () {
-                return BlogTag::where('is_active', true)->select('id', 'title')->get();
+                return BlogTag::where('is_active', true)->select('id', 'title')->get()->toArray();
             }
         );
 
         return Inertia::render('Blog/Edit', [
             'blog' => new BlogResource($blog->load('tags')),
-            'availableTags' => BlogTagResource::collection($blogTags),
+            'availableTags' => $blogTags,
         ]);
     }
 
