@@ -33,8 +33,7 @@ export default function ClientFooter() {
                                 <Clock className="mr-3 mt-1 h-5 w-5" />
                                 <p className="text-sm">
                                     Monday - Friday: 08.00 AM - 05.00 PM <br />
-                                    Saturday: 08.00 AM - 02.00 PM <br />
-                                    Sunday: Closed
+                                    Saturday - Sunday: Closed
                                 </p>
                             </div>
                             <div className="flex items-center">
