@@ -1,3 +1,4 @@
+import ShareButtons from '@/front/js/components/ShareButtons';
 import ClientLayout from '@/front/js/layouts/ClientLayout';
 import { whatsappLink } from '@/front/js/utils/misc';
 import type { PageProps } from '@inertiajs/core';
@@ -94,6 +95,7 @@ export default function ProductShow() {
 
                         <div className="flex flex-col">
                             <h1 className="mb-4 text-4xl font-bold text-gray-900">{product.title}</h1>
+                            <ShareButtons title={product.title} url={route('client.products.show', product.slug, true)} className="mb-6" />
                             {product.specifications && product.specifications.length > 0 && (
                                 <div className="mb-6">
                                     <h2 className="mb-2 text-xl font-semibold text-gray-800">Specifications:</h2>

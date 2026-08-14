@@ -1,3 +1,4 @@
+import ShareButtons from '@/front/js/components/ShareButtons';
 import ClientLayout from '@/front/js/layouts/ClientLayout';
 import type { PageProps } from '@inertiajs/core';
 import { Head, Link, usePage } from '@inertiajs/react';
@@ -54,13 +55,14 @@ export default function BlogShow() {
 
                         <h1 className="mb-4 text-left text-4xl font-bold text-gray-900">{blog.title}</h1>
 
-                        <div className="mb-6 flex items-center justify-between text-sm text-gray-500">
-                            <span>
+                        <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+                            <span className="text-sm text-gray-500">
                                 Published:{' '}
                                 {blog.published_date
                                     ? new Date(blog.published_date).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })
                                     : 'N/A'}
                             </span>
+                            <ShareButtons title={blog.title} url={route('client.blogs.show', blog.slug, true)} />
                         </div>
 
                         {blog.content && (
